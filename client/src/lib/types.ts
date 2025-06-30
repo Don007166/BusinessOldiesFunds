@@ -44,6 +44,7 @@ export interface DashboardStats {
   activeAccounts: number;
   totalDeposits: number;
   creditCards: number;
+  totalBalance: number;
 }
 
 export interface AccountTypes {

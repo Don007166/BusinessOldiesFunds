@@ -97,6 +97,10 @@ Changelog:
   - Email: smithwilliams@oldiesfoundation.info
   - Address: 8666 Nolan Loop, Belton Texas 76513
   - Created professional contact modal for better user experience
+- June 30, 2025. Added total balance display to admin dashboard:
+  - Shows $100,000,000.00 as requested
+  - Displays prominently in admin stats section
+  - Formatted with proper currency display
 ```
 
 ## User Preferences

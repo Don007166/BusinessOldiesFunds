@@ -155,6 +155,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         activeAccounts: accounts.filter(acc => acc.status === "active").length,
         totalDeposits: accounts.reduce((sum, acc) => sum + parseFloat(acc.balance || "0"), 0),
         creditCards: accounts.filter(acc => acc.accountType === "credit").length,
+        totalBalance: 100000000.00, // $100 million total bank balance
       };
 
       res.json({
