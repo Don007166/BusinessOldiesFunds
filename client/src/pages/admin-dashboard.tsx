@@ -101,86 +101,94 @@ export default function AdminDashboard() {
             </div>
           ) : dashboardData ? (
             <>
+              {/* Total Balance Highlight */}
+              <div className="mb-8">
+                <Card className="bg-gradient-to-r from-green-500 to-green-600 border-0 shadow-lg">
+                  <CardContent className="p-8">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="text-white text-lg font-medium mb-2">Total Bank Balance</h2>
+                        <p className="text-white text-4xl font-bold">${dashboardData.stats.totalBalance?.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) || '100,000,000.00'}</p>
+                        <p className="text-green-100 text-sm mt-2">All accounts combined</p>
+                      </div>
+                      <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
               {/* Dashboard Stats */}
-              <div className="grid md:grid-cols-5 gap-6 mb-8">
-                <Card>
+              <div className="grid md:grid-cols-4 gap-6 mb-8">
+                <Card className="hover:shadow-lg transition-shadow duration-200">
                   <CardContent className="p-6">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center shadow-sm">
                         <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <h3 className="text-2xl font-bold text-gray-900">{dashboardData.stats.totalCustomers}</h3>
-                        <p className="text-gray-600">Total Customers</p>
+                        <h3 className="text-3xl font-bold text-gray-900">{dashboardData.stats.totalCustomers}</h3>
+                        <p className="text-gray-500 text-sm font-medium">Total Customers</p>
+                        <p className="text-green-600 text-xs font-semibold mt-1">+5.2% vs last month</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="hover:shadow-lg transition-shadow duration-200">
                   <CardContent className="p-6">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center shadow-sm">
                         <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
                           <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <h3 className="text-2xl font-bold text-gray-900">{dashboardData.stats.activeAccounts}</h3>
-                        <p className="text-gray-600">Active Accounts</p>
+                        <h3 className="text-3xl font-bold text-gray-900">{dashboardData.stats.activeAccounts}</h3>
+                        <p className="text-gray-500 text-sm font-medium">Active Accounts</p>
+                        <p className="text-green-600 text-xs font-semibold mt-1">98.5% active rate</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="hover:shadow-lg transition-shadow duration-200">
                   <CardContent className="p-6">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center shadow-sm">
                         <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <h3 className="text-2xl font-bold text-gray-900">${dashboardData.stats.totalDeposits.toFixed(0)}K</h3>
-                        <p className="text-gray-600">Total Deposits</p>
+                        <h3 className="text-3xl font-bold text-gray-900">${dashboardData.stats.totalDeposits.toFixed(0)}K</h3>
+                        <p className="text-gray-500 text-sm font-medium">Total Deposits</p>
+                        <p className="text-orange-600 text-xs font-semibold mt-1">+12.3% this quarter</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="hover:shadow-lg transition-shadow duration-200">
                   <CardContent className="p-6">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center shadow-sm">
                         <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <h3 className="text-2xl font-bold text-gray-900">{dashboardData.stats.creditCards}</h3>
-                        <p className="text-gray-600">Credit Cards</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center">
-                      <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
-                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="ml-4">
-                        <h3 className="text-2xl font-bold text-gray-900">${dashboardData.stats.totalBalance?.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) || '100,000,000.00'}</h3>
-                        <p className="text-gray-600">Total Balance</p>
+                        <h3 className="text-3xl font-bold text-gray-900">{dashboardData.stats.creditCards}</h3>
+                        <p className="text-gray-500 text-sm font-medium">Credit Cards</p>
+                        <p className="text-purple-600 text-xs font-semibold mt-1">Premium products</p>
                       </div>
                     </div>
                   </CardContent>
@@ -190,11 +198,16 @@ export default function AdminDashboard() {
               {/* Management Sections */}
               <div className="grid md:grid-cols-2 gap-8">
                 {/* Customer Management */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Customer Management</CardTitle>
+                <Card className="shadow-lg">
+                  <CardHeader className="bg-gradient-to-r from-gray-50 to-white">
+                    <CardTitle className="text-xl font-bold text-gray-800 flex items-center">
+                      <svg className="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                      </svg>
+                      Customer Management
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-6">
                     <div className="space-y-4">
                       {dashboardData.recentCustomers.map((customer: any) => (
                         <div key={customer.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -221,11 +234,16 @@ export default function AdminDashboard() {
                 </Card>
 
                 {/* Account Management */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Account Management</CardTitle>
+                <Card className="shadow-lg">
+                  <CardHeader className="bg-gradient-to-r from-gray-50 to-white">
+                    <CardTitle className="text-xl font-bold text-gray-800 flex items-center">
+                      <svg className="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                      </svg>
+                      Account Management
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-6">
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <Button variant="outline" className="p-4 h-auto border-dashed border-gray-300 hover:border-bof-blue hover:bg-blue-50">
