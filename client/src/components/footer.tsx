@@ -1,4 +1,8 @@
+import { useState } from "react";
+import ContactModal from "@/components/contact-modal";
+
 export default function Footer() {
+  const [showContactModal, setShowContactModal] = useState(false);
   return (
     <footer className="bg-bof-navy text-white py-12">
       <div className="max-w-7xl mx-auto px-4">
@@ -35,7 +39,14 @@ export default function Footer() {
           <div>
             <h4 className="font-bold mb-4">Support</h4>
             <ul className="space-y-2 text-sm text-blue-200">
-              <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
+              <li>
+                <button 
+                  onClick={() => setShowContactModal(true)}
+                  className="hover:text-white transition-colors"
+                >
+                  Contact Us
+                </button>
+              </li>
               <li><a href="#" className="hover:text-white transition-colors">Find Locations</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Security Center</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
@@ -46,6 +57,11 @@ export default function Footer() {
           <p>&copy; 2024 Business Oldies Funds. All rights reserved. Member FDIC. Equal Housing Lender.</p>
         </div>
       </div>
+      
+      <ContactModal 
+        isOpen={showContactModal} 
+        onClose={() => setShowContactModal(false)} 
+      />
     </footer>
   );
 }

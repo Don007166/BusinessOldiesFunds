@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
+import ContactModal from "@/components/contact-modal";
 
 interface UserAuth {
   user: any;
@@ -31,6 +32,7 @@ export default function UserDashboard() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const { user, isLoading: isAuthLoading, isAuthenticated } = useAuth();
+  const [showContactModal, setShowContactModal] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -235,7 +237,11 @@ export default function UserDashboard() {
                         <p className="text-sm font-medium">Mobile Deposit</p>
                       </div>
                     </Button>
-                    <Button variant="outline" className="p-6 h-auto border-orange-500 text-orange-600 hover:bg-orange-50">
+                    <Button 
+                      variant="outline" 
+                      className="p-6 h-auto border-orange-500 text-orange-600 hover:bg-orange-50"
+                      onClick={() => setShowContactModal(true)}
+                    >
                       <div className="text-center">
                         <svg className="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
@@ -256,6 +262,11 @@ export default function UserDashboard() {
       </div>
 
       <Footer />
+      
+      <ContactModal 
+        isOpen={showContactModal} 
+        onClose={() => setShowContactModal(false)} 
+      />
     </div>
   );
 }

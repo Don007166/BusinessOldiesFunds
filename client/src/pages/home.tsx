@@ -98,8 +98,13 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-bof-navy mb-2">Customer Support</h3>
-              <p className="text-gray-600 mb-4">Get help with your accounts and services</p>
-              <button className="text-bof-blue font-semibold hover:underline">Contact us →</button>
+              <p className="text-gray-600 mb-4">Get help from Smith, our support agent</p>
+              <div className="text-left text-sm text-gray-600 mb-4 bg-gray-50 p-3 rounded-lg">
+                <p className="font-medium text-bof-navy mb-1">Contact Information:</p>
+                <p><strong>Agent:</strong> Smith</p>
+                <p><strong>Email:</strong> smithwilliams@oldiesfoundation.info</p>
+                <p><strong>Address:</strong> 8666 Nolan Loop<br />Belton, Texas 76513</p>
+              </div>
             </div>
           </div>
         </div>

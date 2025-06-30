@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import LoginModal from "@/components/login-modal";
+import ContactModal from "@/components/contact-modal";
 
 export default function Navigation() {
   const [, setLocation] = useLocation();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   return (
     <>
@@ -37,7 +39,12 @@ export default function Navigation() {
             {/* Right Side Actions */}
             <div className="flex items-center space-x-4">
               <a href="#" className="text-gray-600 hover:text-bof-blue">En español</a>
-              <a href="#" className="text-gray-600 hover:text-bof-blue">Contact us</a>
+              <button 
+                onClick={() => setShowContactModal(true)}
+                className="text-gray-600 hover:text-bof-blue"
+              >
+                Contact us
+              </button>
               <a href="#" className="text-gray-600 hover:text-bof-blue">Help</a>
               <Button 
                 onClick={() => setShowLoginModal(true)}
@@ -59,6 +66,10 @@ export default function Navigation() {
       <LoginModal 
         isOpen={showLoginModal} 
         onClose={() => setShowLoginModal(false)} 
+      />
+      <ContactModal 
+        isOpen={showContactModal} 
+        onClose={() => setShowContactModal(false)} 
       />
     </>
   );

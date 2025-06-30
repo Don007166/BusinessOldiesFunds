@@ -92,6 +92,11 @@ Business Oldies Funds (BOF) is a full-stack banking application built with moder
 ```
 Changelog:
 - June 30, 2025. Initial setup
+- June 30, 2025. Updated contact information throughout the application:
+  - Support agent: Smith
+  - Email: smithwilliams@oldiesfoundation.info
+  - Address: 8666 Nolan Loop, Belton Texas 76513
+  - Created professional contact modal for better user experience
 ```
 
 ## User Preferences
