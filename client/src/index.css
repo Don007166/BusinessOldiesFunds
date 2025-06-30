@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(218, 12%, 11%);
+  --muted: hsl(210, 10%, 96%);
+  --muted-foreground: hsl(218, 12%, 45%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(218, 12%, 11%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(218, 12%, 11%);
+  --border: hsl(214, 20%, 90%);
+  --input: hsl(214, 20%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(210, 100%, 98%);
+  --secondary: hsl(210, 10%, 96%);
+  --secondary-foreground: hsl(218, 12%, 11%);
+  --accent: hsl(210, 10%, 96%);
+  --accent-foreground: hsl(218, 12%, 11%);
+  --destructive: hsl(0, 85%, 56%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(207, 90%, 54%);
+  --radius: 0.5rem;
+  
+  /* BOF Brand Colors */
+  --bof-blue: hsl(207, 90%, 54%);
+  --bof-navy: hsl(218, 45%, 25%);
+  --bof-red: hsl(348, 83%, 47%);
+  --bof-gray: hsl(215, 14%, 46%);
+  --bof-light: hsl(210, 17%, 98%);
+  --bof-green: hsl(142, 76%, 36%);
+  --bof-orange: hsl(25, 95%, 53%);
+  --bof-purple: hsl(262, 83%, 58%);
+}
+
+.dark {
+  --background: hsl(218, 15%, 8%);
+  --foreground: hsl(210, 10%, 98%);
+  --muted: hsl(218, 15%, 12%);
+  --muted-foreground: hsl(218, 12%, 65%);
+  --popover: hsl(218, 15%, 8%);
+  --popover-foreground: hsl(210, 10%, 98%);
+  --card: hsl(218, 15%, 8%);
+  --card-foreground: hsl(210, 10%, 98%);
+  --border: hsl(218, 15%, 18%);
+  --input: hsl(218, 15%, 18%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(210, 100%, 98%);
+  --secondary: hsl(218, 15%, 12%);
+  --secondary-foreground: hsl(210, 10%, 98%);
+  --accent: hsl(218, 15%, 12%);
+  --accent-foreground: hsl(210, 10%, 98%);
+  --destructive: hsl(0, 62%, 50%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(207, 90%, 54%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .bof-blue {
+    color: var(--bof-blue);
+  }
+  
+  .bg-bof-blue {
+    background-color: var(--bof-blue);
+  }
+  
+  .bof-navy {
+    color: var(--bof-navy);
+  }
+  
+  .bg-bof-navy {
+    background-color: var(--bof-navy);
+  }
+  
+  .bof-red {
+    color: var(--bof-red);
+  }
+  
+  .bg-bof-red {
+    background-color: var(--bof-red);
+  }
+  
+  .bg-bof-light {
+    background-color: var(--bof-light);
+  }
+  
+  .bof-gray {
+    color: var(--bof-gray);
+  }
+  
+  .bg-bof-gray {
+    background-color: var(--bof-gray);
+  }
+  
+  .border-bof-blue {
+    border-color: var(--bof-blue);
+  }
+  
+  .border-bof-navy {
+    border-color: var(--bof-navy);
+  }
+  
+  .hover\:bg-bof-navy:hover {
+    background-color: var(--bof-navy);
+  }
+  
+  .hover\:text-bof-blue:hover {
+    color: var(--bof-blue);
+  }
+  
+  .text-bof-blue {
+    color: var(--bof-blue);
+  }
+  
+  .text-bof-navy {
+    color: var(--bof-navy);
+  }
+  
+  .text-bof-red {
+    color: var(--bof-red);
+  }
+}
