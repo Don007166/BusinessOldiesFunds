@@ -139,14 +139,18 @@ export default function CustomersList() {
                             <div className="space-y-2">
                               {userAccounts.length > 0 ? (
                                 userAccounts.map((account: any) => (
-                                  <div key={account.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                  <div key={account.id} className="flex items-center justify-between p-3 bg-gray-50 border rounded-lg">
                                     <div>
-                                      <span className="font-medium text-sm">{account.accountType.toUpperCase()}</span>
-                                      <p className="text-xs text-gray-600">{account.accountNumber}</p>
+                                      <span className="font-medium text-sm">{account.accountType.toUpperCase()} ACCOUNT</span>
+                                      <p className="text-xs text-gray-600">Account: {account.accountNumber}</p>
+                                      <p className="text-xs text-gray-600">Status: {account.status.toUpperCase()}</p>
                                     </div>
-                                    <span className="font-bold text-sm">
-                                      ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
-                                    </span>
+                                    <div className="text-right">
+                                      <span className="font-bold text-sm">
+                                        ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                                      </span>
+                                      <p className="text-xs text-gray-500">Available</p>
+                                    </div>
                                   </div>
                                 ))
                               ) : (

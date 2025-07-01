@@ -26,7 +26,6 @@ export default function EditCustomer() {
     state: "",
     zipCode: "",
     dateOfBirth: "",
-    driversLicenseNumber: "",
     isActive: true
   });
 
@@ -67,7 +66,7 @@ export default function EditCustomer() {
         state: user.state || "",
         zipCode: user.zipCode || "",
         dateOfBirth: user.dateOfBirth || "",
-        driversLicenseNumber: user.driversLicenseNumber || "",
+
         isActive: user.isActive
       });
     }
@@ -155,7 +154,7 @@ export default function EditCustomer() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
                   Edit {user.firstName} {user.lastName}
                 </h2>
-                <p className="text-gray-600">Customer ID: {user.driversLicenseNumber}</p>
+                <p className="text-gray-600">Customer ID: {user.id}</p>
               </div>
 
               <Card className="shadow-lg">
@@ -258,15 +257,7 @@ export default function EditCustomer() {
                           required
                         />
                       </div>
-                      <div>
-                        <Label htmlFor="driversLicenseNumber">Customer ID</Label>
-                        <Input
-                          id="driversLicenseNumber"
-                          value={formData.driversLicenseNumber}
-                          onChange={(e) => handleInputChange("driversLicenseNumber", e.target.value)}
-                          required
-                        />
-                      </div>
+
                     </div>
 
                     <div className="flex items-center space-x-2">

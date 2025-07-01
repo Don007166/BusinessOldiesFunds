@@ -221,7 +221,7 @@ export default function ManageAccounts() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
                   Manage Accounts for {user.firstName} {user.lastName}
                 </h2>
-                <p className="text-gray-600">Customer ID: {user.driversLicenseNumber}</p>
+                <p className="text-gray-600">Customer ID: {user.id}</p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-8">
