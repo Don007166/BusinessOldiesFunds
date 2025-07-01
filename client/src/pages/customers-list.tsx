@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAdmin } from "@/hooks/useAdmin";
 import { Badge } from "@/components/ui/badge";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function CustomersList() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const { admin, isLoading: isAdminLoading } = useAdmin();
+  const [cardApplications, setCardApplications] = useState<Record<string, string>>({});
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -35,6 +37,29 @@ export default function CustomersList() {
     queryKey: ["/api/admin/accounts"],
     enabled: !!admin,
   });
+
+  // Card application mutation
+  const cardApplicationMutation = useMutation({
+    mutationFn: async (data: { userId: number; cardType: string }) => {
+      return await apiRequest("POST", "/api/admin/apply-card", data);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Card Application Submitted",
+        description: "Card is in processing",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Application Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+
 
   if (isAdminLoading || !admin) {
     return (
@@ -136,26 +161,82 @@ export default function CustomersList() {
                                 ${totalBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                               </span>
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-3">
                               {userAccounts.length > 0 ? (
                                 userAccounts.map((account: any) => (
-                                  <div key={account.id} className="flex items-center justify-between p-3 bg-gray-50 border rounded-lg">
-                                    <div>
-                                      <span className="font-medium text-sm">{account.accountType.toUpperCase()} ACCOUNT</span>
-                                      <p className="text-xs text-gray-600">Account: {account.accountNumber}</p>
-                                      <p className="text-xs text-gray-600">Status: {account.status.toUpperCase()}</p>
-                                    </div>
-                                    <div className="text-right">
-                                      <span className="font-bold text-sm">
+                                  <div key={account.id} className="p-4 bg-white border-2 border-gray-200 rounded-lg shadow-sm">
+                                    <div className="flex items-center justify-between mb-2">
+                                      <h5 className="font-bold text-lg text-gray-800">{account.accountType.toUpperCase()} Account</h5>
+                                      <span className="text-2xl font-bold text-green-600">
                                         ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                                       </span>
-                                      <p className="text-xs text-gray-500">Available</p>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2 text-sm">
+                                      <div>
+                                        <span className="font-medium text-gray-600">Account Number:</span>
+                                        <p className="font-mono text-gray-800">{account.accountNumber}</p>
+                                      </div>
+                                      <div>
+                                        <span className="font-medium text-gray-600">Status:</span>
+                                        <p className="font-semibold text-green-600">{account.status.toUpperCase()}</p>
+                                      </div>
+                                      <div>
+                                        <span className="font-medium text-gray-600">Account ID:</span>
+                                        <p className="font-mono text-gray-800">#{account.id}</p>
+                                      </div>
+                                      <div>
+                                        <span className="font-medium text-gray-600">Current Balance:</span>
+                                        <p className="font-bold text-gray-800">Available</p>
+                                      </div>
                                     </div>
                                   </div>
                                 ))
                               ) : (
                                 <p className="text-gray-500 italic text-sm">No accounts found</p>
                               )}
+                              
+                              {/* Card Application Section */}
+                              <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                                <h5 className="font-bold text-gray-800 mb-2">Card Services</h5>
+                                <div className="flex flex-wrap gap-2">
+                                  <Button 
+                                    size="sm" 
+                                    variant="outline" 
+                                    className="text-blue-600 border-blue-600 hover:bg-blue-100"
+                                    onClick={() => {
+                                      cardApplicationMutation.mutate({
+                                        userId: user.id,
+                                        cardType: 'debit'
+                                      });
+                                      setCardApplications(prev => ({
+                                        ...prev,
+                                        [`${user.id}-debit`]: 'processing'
+                                      }));
+                                    }}
+                                    disabled={cardApplications[`${user.id}-debit`] === 'processing' || cardApplicationMutation.isPending}
+                                  >
+                                    {cardApplications[`${user.id}-debit`] === 'processing' ? 'Card in Processing' : 'Apply for Debit Card'}
+                                  </Button>
+                                  <Button 
+                                    size="sm" 
+                                    variant="outline" 
+                                    className="text-purple-600 border-purple-600 hover:bg-purple-100"
+                                    onClick={() => {
+                                      cardApplicationMutation.mutate({
+                                        userId: user.id,
+                                        cardType: 'credit'
+                                      });
+                                      setCardApplications(prev => ({
+                                        ...prev,
+                                        [`${user.id}-credit`]: 'processing'
+                                      }));
+                                    }}
+                                    disabled={cardApplications[`${user.id}-credit`] === 'processing' || cardApplicationMutation.isPending}
+                                  >
+                                    {cardApplications[`${user.id}-credit`] === 'processing' ? 'Card in Processing' : 'Apply for Credit Card'}
+                                  </Button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -166,7 +247,10 @@ export default function CustomersList() {
                           size="sm" 
                           variant="outline" 
                           className="text-blue-600 border-blue-600 hover:bg-blue-50"
-                          onClick={() => setLocation(`/admin/customer/${user.id}/edit`)}
+                          onClick={() => {
+                            console.log(`Navigating to edit: /admin/customer/${user.id}/edit`);
+                            setLocation(`/admin/customer/${user.id}/edit`);
+                          }}
                         >
                           Edit Customer
                         </Button>
@@ -174,7 +258,10 @@ export default function CustomersList() {
                           size="sm" 
                           variant="outline" 
                           className="text-green-600 border-green-600 hover:bg-green-50"
-                          onClick={() => setLocation(`/admin/customer/${user.id}`)}
+                          onClick={() => {
+                            console.log(`Navigating to view: /admin/customer/${user.id}`);
+                            setLocation(`/admin/customer/${user.id}`);
+                          }}
                         >
                           View Details
                         </Button>
@@ -182,7 +269,10 @@ export default function CustomersList() {
                           size="sm" 
                           variant="outline" 
                           className="text-purple-600 border-purple-600 hover:bg-purple-50"
-                          onClick={() => setLocation(`/admin/customer/${user.id}/accounts`)}
+                          onClick={() => {
+                            console.log(`Navigating to accounts: /admin/customer/${user.id}/accounts`);
+                            setLocation(`/admin/customer/${user.id}/accounts`);
+                          }}
                         >
                           Manage Accounts
                         </Button>

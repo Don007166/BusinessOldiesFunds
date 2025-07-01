@@ -48,6 +48,14 @@ export const admins = pgTable("admins", {
   isActive: boolean("is_active").default(true),
 });
 
+export const cards = pgTable("cards", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  cardType: text("card_type").notNull(), // 'debit' or 'credit'
+  status: text("status").notNull().default("processing"), // 'processing', 'approved', 'declined'
+  appliedAt: timestamp("applied_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -109,3 +117,11 @@ export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
 export type Admin = typeof admins.$inferSelect;
 export type InsertAdmin = z.infer<typeof insertAdminSchema>;
 export type AdminLogin = z.infer<typeof adminLoginSchema>;
+
+export const insertCardSchema = createInsertSchema(cards).omit({
+  id: true,
+  appliedAt: true,
+});
+
+export type Card = typeof cards.$inferSelect;
+export type InsertCard = z.infer<typeof insertCardSchema>;

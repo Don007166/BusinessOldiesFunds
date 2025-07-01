@@ -1,7 +1,9 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { userSignupSchema, userLoginSchema, adminLoginSchema } from "@shared/schema";
+import { userSignupSchema, userLoginSchema, adminLoginSchema, cards } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 import session from "express-session";
 
 // Telegram notification function
@@ -465,6 +467,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to create account" });
+    }
+  });
+
+  // Card application route
+  app.post("/api/admin/apply-card", requireAdmin, async (req, res) => {
+    try {
+      const { userId, cardType } = req.body;
+      
+      if (!userId || !cardType) {
+        return res.status(400).json({ message: "User ID and card type are required" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Insert card application directly into database
+      const [cardApplication] = await db
+        .insert(cards)
+        .values({
+          userId: userId,
+          cardType: cardType,
+          status: "processing"
+        })
+        .returning();
+
+      res.json({ 
+        message: "Card application submitted successfully",
+        application: cardApplication
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to submit card application" });
+    }
+  });
+
+  // Get user card applications
+  app.get("/api/admin/user/:userId/cards", requireAdmin, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      
+      const userCards = await db
+        .select()
+        .from(cards)
+        .where(eq(cards.userId, userId));
+
+      res.json(userCards);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch card applications" });
     }
   });
 
