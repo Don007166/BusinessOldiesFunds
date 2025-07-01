@@ -18,6 +18,8 @@ interface SignupModalProps {
 
 export default function SignupModal({ isOpen, onClose, onLoginSwitch }: SignupModalProps) {
   const [step, setStep] = useState(1);
+  const [selectedCardType, setSelectedCardType] = useState("");
+  const [showCardProcessing, setShowCardProcessing] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<UserSignup>({
@@ -58,13 +60,10 @@ export default function SignupModal({ isOpen, onClose, onLoginSwitch }: SignupMo
     },
     onSuccess: () => {
       toast({
-        title: "Welcome to Business Oldies Funds! 🎉",
-        description: "Your account has been created successfully. You're now logged in!",
+        title: "Welcome to Business Oldies Funds!",
+        description: "Your account has been created successfully. Please select your card type.",
       });
-      onClose();
-      form.reset();
-      setStep(1);
-      window.location.reload(); // Refresh to update auth state
+      setStep(4); // Move to card selection step
     },
     onError: (error: Error) => {
       toast({
@@ -77,6 +76,25 @@ export default function SignupModal({ isOpen, onClose, onLoginSwitch }: SignupMo
 
   const onSubmit = (data: UserSignup) => {
     signupMutation.mutate(data);
+  };
+
+  const handleCardSelection = (cardType: string) => {
+    setSelectedCardType(cardType);
+    setShowCardProcessing(true);
+    
+    toast({
+      title: "Card Processing",
+      description: `Your ${cardType} card is being processed. You will receive it once approved.`,
+    });
+    
+    setTimeout(() => {
+      onClose();
+      form.reset();
+      setStep(1);
+      setSelectedCardType("");
+      setShowCardProcessing(false);
+      window.location.reload(); // Refresh to update auth state
+    }, 3000);
   };
 
   const nextStep = () => {
@@ -115,7 +133,7 @@ export default function SignupModal({ isOpen, onClose, onLoginSwitch }: SignupMo
             Open Your BOF Account
           </DialogTitle>
           <div className="flex justify-center space-x-2 mt-4">
-            {[1, 2, 3].map((i) => (
+            {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
                 className={`w-3 h-3 rounded-full ${
@@ -125,7 +143,7 @@ export default function SignupModal({ isOpen, onClose, onLoginSwitch }: SignupMo
             ))}
           </div>
           <p className="text-center text-sm text-gray-600 mt-2">
-            Step {step} of 3
+            Step {step} of {step === 4 ? 4 : 3}
           </p>
         </DialogHeader>
 
@@ -401,8 +419,104 @@ export default function SignupModal({ isOpen, onClose, onLoginSwitch }: SignupMo
             </div>
           )}
 
-          <div className="flex justify-between pt-6 border-t">
-            <div>
+          {step === 4 && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Choose Your Card Type</h3>
+                <p className="text-gray-600 mb-6">Select the card that best fits your financial needs.</p>
+              </div>
+
+              {showCardProcessing ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Processing Your Card</h4>
+                  <p className="text-gray-600">Your {selectedCardType} card is being processed. Please wait...</p>
+                  <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-green-800 font-medium">✓ Card Processing Only</p>
+                    <p className="text-green-700 text-sm mt-1">No delivery information required at this time</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div 
+                    className="p-6 border-2 border-gray-200 rounded-lg hover:border-blue-500 cursor-pointer transition-colors bg-gradient-to-br from-blue-50 to-blue-100"
+                    onClick={() => handleCardSelection("Visa Debit")}
+                  >
+                    <div className="text-center">
+                      <div className="w-16 h-10 bg-blue-600 rounded mb-4 mx-auto flex items-center justify-center">
+                        <span className="text-white font-bold text-xs">VISA</span>
+                      </div>
+                      <h4 className="font-semibold text-gray-900 mb-2">Visa Debit Card</h4>
+                      <p className="text-sm text-gray-600 mb-4">Perfect for everyday spending with direct account access</p>
+                      <ul className="text-xs text-gray-600 space-y-1">
+                        <li>• No annual fee</li>
+                        <li>• Worldwide acceptance</li>
+                        <li>• Instant account deduction</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div 
+                    className="p-6 border-2 border-gray-200 rounded-lg hover:border-red-500 cursor-pointer transition-colors bg-gradient-to-br from-red-50 to-red-100"
+                    onClick={() => handleCardSelection("Mastercard Credit")}
+                  >
+                    <div className="text-center">
+                      <div className="w-16 h-10 bg-red-600 rounded mb-4 mx-auto flex items-center justify-center">
+                        <span className="text-white font-bold text-xs">MC</span>
+                      </div>
+                      <h4 className="font-semibold text-gray-900 mb-2">Mastercard Credit</h4>
+                      <p className="text-sm text-gray-600 mb-4">Build credit history with flexible payment options</p>
+                      <ul className="text-xs text-gray-600 space-y-1">
+                        <li>• Credit limit up to $5,000</li>
+                        <li>• 0% APR for first 12 months</li>
+                        <li>• Rewards program included</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div 
+                    className="p-6 border-2 border-gray-200 rounded-lg hover:border-green-500 cursor-pointer transition-colors bg-gradient-to-br from-green-50 to-green-100"
+                    onClick={() => handleCardSelection("American Express")}
+                  >
+                    <div className="text-center">
+                      <div className="w-16 h-10 bg-green-600 rounded mb-4 mx-auto flex items-center justify-center">
+                        <span className="text-white font-bold text-xs">AMEX</span>
+                      </div>
+                      <h4 className="font-semibold text-gray-900 mb-2">American Express</h4>
+                      <p className="text-sm text-gray-600 mb-4">Premium card with exclusive benefits and rewards</p>
+                      <ul className="text-xs text-gray-600 space-y-1">
+                        <li>• Premium rewards program</li>
+                        <li>• Travel insurance included</li>
+                        <li>• 24/7 concierge service</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div 
+                    className="p-6 border-2 border-gray-200 rounded-lg hover:border-purple-500 cursor-pointer transition-colors bg-gradient-to-br from-purple-50 to-purple-100"
+                    onClick={() => handleCardSelection("BOF Platinum")}
+                  >
+                    <div className="text-center">
+                      <div className="w-16 h-10 bg-purple-600 rounded mb-4 mx-auto flex items-center justify-center">
+                        <span className="text-white font-bold text-xs">BOF</span>
+                      </div>
+                      <h4 className="font-semibold text-gray-900 mb-2">BOF Platinum Card</h4>
+                      <p className="text-sm text-gray-600 mb-4">Our premium banking card with all-inclusive benefits</p>
+                      <ul className="text-xs text-gray-600 space-y-1">
+                        <li>• No foreign transaction fees</li>
+                        <li>• Priority customer service</li>
+                        <li>• Exclusive BOF member benefits</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {step !== 4 && (
+            <div className="flex justify-between pt-6 border-t">
+              <div>
               {step > 1 && (
                 <Button
                   type="button"
@@ -442,8 +556,9 @@ export default function SignupModal({ isOpen, onClose, onLoginSwitch }: SignupMo
                   {signupMutation.isPending ? "Creating Account..." : "Create Account"}
                 </Button>
               )}
+              </div>
             </div>
-          </div>
+          )}
         </form>
       </DialogContent>
     </Dialog>

@@ -345,11 +345,11 @@ export default function ManageAccounts() {
                             <div>
                               <h4 className="font-semibold text-lg">{account.accountType.toUpperCase()} Account</h4>
                               <p className="text-gray-600">Account Number: {account.accountNumber}</p>
-                              <p className="text-gray-600">Status: 
+                              <div className="text-gray-600">Status: 
                                 <Badge variant={account.status === 'active' ? "default" : "secondary"} className="ml-2">
                                   {account.status}
                                 </Badge>
-                              </p>
+                              </div>
                             </div>
                             <div className="text-right">
                               <p className="text-2xl font-bold text-green-600">
