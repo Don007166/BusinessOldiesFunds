@@ -48,13 +48,13 @@ export default function CustomersList() {
   }
 
   // Group accounts by user ID for easy lookup
-  const accountsByUser = (accounts || []).reduce((acc: any, account: any) => {
+  const accountsByUser = Array.isArray(accounts) ? accounts.reduce((acc: any, account: any) => {
     if (!acc[account.userId]) {
       acc[account.userId] = [];
     }
     acc[account.userId].push(account);
     return acc;
-  }, {} as Record<number, any[]>);
+  }, {} as Record<number, any[]>) : {};
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -91,7 +91,7 @@ export default function CustomersList() {
             </div>
           ) : (
             <div className="grid gap-6">
-              {(users || []).map((user: any) => {
+              {Array.isArray(users) && users.map((user: any) => {
                 const userAccounts = accountsByUser[user.id] || [];
                 const totalBalance = userAccounts.reduce((sum: number, account: any) => 
                   sum + parseFloat(account.balance || '0'), 0
@@ -105,7 +105,7 @@ export default function CustomersList() {
                           <CardTitle className="text-xl font-bold text-gray-800">
                             {user.firstName} {user.lastName}
                           </CardTitle>
-                          <p className="text-gray-600 mt-1">ID: {user.driversLicenseNumber} • Username: {user.username}</p>
+                          <p className="text-gray-600 mt-1">ID: {user.id}</p>
                         </div>
                         <Badge variant={user.isActive ? "default" : "secondary"}>
                           {user.isActive ? "Active" : "Inactive"}

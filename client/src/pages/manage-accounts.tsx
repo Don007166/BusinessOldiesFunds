@@ -68,6 +68,7 @@ export default function ManageAccounts() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/user-accounts", userId] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/accounts"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
     },
     onError: (error: Error) => {
       toast({
@@ -92,6 +93,7 @@ export default function ManageAccounts() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/user-accounts", userId] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/accounts"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
     },
     onError: (error: Error) => {
       toast({
