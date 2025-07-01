@@ -26,6 +26,7 @@ export const accounts = pgTable("accounts", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").references(() => users.id).notNull(),
   accountNumber: text("account_number").notNull().unique(),
+  accountIdDisplay: text("account_id_display"), // Separate display ID for accounts
   accountType: text("account_type").notNull(), // checking, savings, credit, loan
   balance: decimal("balance", { precision: 12, scale: 2 }).default("0.00"),
   status: text("status").default("active"), // active, closed, suspended

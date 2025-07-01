@@ -272,10 +272,10 @@ export default function CustomerDetails() {
                           </div>
                           <div>
                             <span className="font-medium text-gray-600">Account ID:</span>
-                            <p className="font-mono text-gray-800">{account.accountNumber.replace('BOF-', '').replace(/-/g, '')}</p>
+                            <p className="font-mono text-gray-800">{account.accountIdDisplay || 'ACC-' + Math.random().toString().slice(2, 10)}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-gray-600">Current Balance:</span>
+                            <span className="font-medium text-gray-600">Available Balance:</span>
                             <p className="font-bold text-green-600">
                               ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Available
                             </p>
