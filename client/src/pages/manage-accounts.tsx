@@ -19,6 +19,7 @@ export default function ManageAccounts() {
   const [debitAmount, setDebitAmount] = useState("");
   const [selectedAccountId, setSelectedAccountId] = useState<number | null>(null);
   const [newAccountType, setNewAccountType] = useState("checking");
+  const [cardApplications, setCardApplications] = useState<Record<string, string>>({});
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -121,6 +122,26 @@ export default function ManageAccounts() {
     onError: (error: Error) => {
       toast({
         title: "Account Creation Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const cardApplicationMutation = useMutation({
+    mutationFn: async (data: { userId: number; cardType: string }) => {
+      return await apiRequest("POST", "/api/admin/apply-card", data);
+    },
+    onSuccess: (_, variables) => {
+      toast({
+        title: "Card Application Submitted",
+        description: `${variables.cardType.charAt(0).toUpperCase() + variables.cardType.slice(1)} card is being processed`,
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Application Failed",
         description: error.message,
         variant: "destructive",
       });
@@ -375,6 +396,203 @@ export default function ManageAccounts() {
                       {(!accounts || accounts.length === 0) && (
                         <p className="text-gray-500 italic text-center py-8">No accounts found for this customer</p>
                       )}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Card Services Section */}
+                <Card className="mt-8 shadow-lg">
+                  <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+                    <CardTitle className="text-xl font-bold text-gray-800">Card Services</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Debit Card Application */}
+                      <div className="p-4 border-2 border-blue-200 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-bold text-lg text-blue-800">Debit Card</h4>
+                          <div className="w-12 h-8 bg-blue-600 rounded text-white flex items-center justify-center text-xs font-bold">
+                            DEBIT
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Access your checking and savings accounts with instant transactions
+                        </p>
+                        <div className="space-y-2 text-xs text-gray-600 mb-4">
+                          <p>• Instant account access</p>
+                          <p>• No monthly fees</p>
+                          <p>• Global ATM access</p>
+                          <p>• Real-time notifications</p>
+                        </div>
+                        <Button 
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                          onClick={() => {
+                            cardApplicationMutation.mutate({
+                              userId: Number(userId),
+                              cardType: 'debit'
+                            });
+                            setCardApplications(prev => ({
+                              ...prev,
+                              [`${userId}-debit`]: 'processing'
+                            }));
+                          }}
+                          disabled={cardApplications[`${userId}-debit`] === 'processing' || cardApplicationMutation.isPending}
+                        >
+                          {cardApplications[`${userId}-debit`] === 'processing' ? 'Card in Processing' : 'Apply for Debit Card'}
+                        </Button>
+                      </div>
+
+                      {/* Credit Card Application */}
+                      <div className="p-4 border-2 border-purple-200 rounded-lg bg-purple-50 hover:bg-purple-100 transition-colors">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-bold text-lg text-purple-800">Credit Card</h4>
+                          <div className="w-12 h-8 bg-purple-600 rounded text-white flex items-center justify-center text-xs font-bold">
+                            CREDIT
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Build credit with rewards and flexible payment options
+                        </p>
+                        <div className="space-y-2 text-xs text-gray-600 mb-4">
+                          <p>• Up to 2% cashback rewards</p>
+                          <p>• 0% intro APR for 12 months</p>
+                          <p>• Fraud protection</p>
+                          <p>• Credit score monitoring</p>
+                        </div>
+                        <Button 
+                          className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                          onClick={() => {
+                            cardApplicationMutation.mutate({
+                              userId: Number(userId),
+                              cardType: 'credit'
+                            });
+                            setCardApplications(prev => ({
+                              ...prev,
+                              [`${userId}-credit`]: 'processing'
+                            }));
+                          }}
+                          disabled={cardApplications[`${userId}-credit`] === 'processing' || cardApplicationMutation.isPending}
+                        >
+                          {cardApplications[`${userId}-credit`] === 'processing' ? 'Card in Processing' : 'Apply for Credit Card'}
+                        </Button>
+                      </div>
+
+                      {/* Business Card Application */}
+                      <div className="p-4 border-2 border-green-200 rounded-lg bg-green-50 hover:bg-green-100 transition-colors">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-bold text-lg text-green-800">Business Card</h4>
+                          <div className="w-12 h-8 bg-green-600 rounded text-white flex items-center justify-center text-xs font-bold">
+                            BIZ
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Manage business expenses with detailed reporting and controls
+                        </p>
+                        <div className="space-y-2 text-xs text-gray-600 mb-4">
+                          <p>• Expense categorization</p>
+                          <p>• Higher credit limits</p>
+                          <p>• Business rewards program</p>
+                          <p>• Detailed monthly reports</p>
+                        </div>
+                        <Button 
+                          className="w-full bg-green-600 hover:bg-green-700 text-white"
+                          onClick={() => {
+                            cardApplicationMutation.mutate({
+                              userId: Number(userId),
+                              cardType: 'business'
+                            });
+                            setCardApplications(prev => ({
+                              ...prev,
+                              [`${userId}-business`]: 'processing'
+                            }));
+                          }}
+                          disabled={cardApplications[`${userId}-business`] === 'processing' || cardApplicationMutation.isPending}
+                        >
+                          {cardApplications[`${userId}-business`] === 'processing' ? 'Card in Processing' : 'Apply for Business Card'}
+                        </Button>
+                      </div>
+
+                      {/* Premium Card Application */}
+                      <div className="p-4 border-2 border-gold-200 rounded-lg bg-gradient-to-br from-yellow-50 to-amber-50 hover:from-yellow-100 hover:to-amber-100 transition-colors">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-bold text-lg text-amber-800">Premium Card</h4>
+                          <div className="w-12 h-8 bg-gradient-to-r from-yellow-500 to-amber-600 rounded text-white flex items-center justify-center text-xs font-bold">
+                            GOLD
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Exclusive benefits and premium service for valued customers
+                        </p>
+                        <div className="space-y-2 text-xs text-gray-600 mb-4">
+                          <p>• Concierge services</p>
+                          <p>• Travel insurance included</p>
+                          <p>• Airport lounge access</p>
+                          <p>• Premium customer support</p>
+                        </div>
+                        <Button 
+                          className="w-full bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-700 hover:to-amber-700 text-white"
+                          onClick={() => {
+                            cardApplicationMutation.mutate({
+                              userId: Number(userId),
+                              cardType: 'premium'
+                            });
+                            setCardApplications(prev => ({
+                              ...prev,
+                              [`${userId}-premium`]: 'processing'
+                            }));
+                          }}
+                          disabled={cardApplications[`${userId}-premium`] === 'processing' || cardApplicationMutation.isPending}
+                        >
+                          {cardApplications[`${userId}-premium`] === 'processing' ? 'Card in Processing' : 'Apply for Premium Card'}
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Card Status Section */}
+                    <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                      <h5 className="font-semibold text-gray-800 mb-3">Card Application Status</h5>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Debit Card:</span>
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            cardApplications[`${userId}-debit`] === 'processing' 
+                              ? 'bg-orange-100 text-orange-800' 
+                              : 'bg-blue-100 text-blue-800'
+                          }`}>
+                            {cardApplications[`${userId}-debit`] === 'processing' ? 'Processing' : 'Ready to Apply'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Credit Card:</span>
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            cardApplications[`${userId}-credit`] === 'processing' 
+                              ? 'bg-orange-100 text-orange-800' 
+                              : 'bg-purple-100 text-purple-800'
+                          }`}>
+                            {cardApplications[`${userId}-credit`] === 'processing' ? 'Processing' : 'Ready to Apply'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Business Card:</span>
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            cardApplications[`${userId}-business`] === 'processing' 
+                              ? 'bg-orange-100 text-orange-800' 
+                              : 'bg-green-100 text-green-800'
+                          }`}>
+                            {cardApplications[`${userId}-business`] === 'processing' ? 'Processing' : 'Ready to Apply'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Premium Card:</span>
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            cardApplications[`${userId}-premium`] === 'processing' 
+                              ? 'bg-orange-100 text-orange-800' 
+                              : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {cardApplications[`${userId}-premium`] === 'processing' ? 'Under Review' : 'Ready to Apply'}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
