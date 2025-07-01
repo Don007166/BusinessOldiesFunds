@@ -162,7 +162,7 @@ export default function CustomersList() {
                           size="sm" 
                           variant="outline" 
                           className="text-blue-600 border-blue-600 hover:bg-blue-50"
-                          onClick={() => setLocation(`/admin/customer/${user.id}`)}
+                          onClick={() => setLocation(`/admin/customer/${user.id}/edit`)}
                         >
                           Edit Customer
                         </Button>
@@ -178,7 +178,7 @@ export default function CustomersList() {
                           size="sm" 
                           variant="outline" 
                           className="text-purple-600 border-purple-600 hover:bg-purple-50"
-                          onClick={() => setLocation(`/admin/customer/${user.id}`)}
+                          onClick={() => setLocation(`/admin/customer/${user.id}/accounts`)}
                         >
                           Manage Accounts
                         </Button>

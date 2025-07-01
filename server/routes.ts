@@ -373,6 +373,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update user
+  app.put("/api/admin/user/:userId", requireAdmin, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const userData = req.body;
+      
+      const updatedUser = await storage.updateUser(userId, userData);
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json({ message: "User updated successfully", user: updatedUser });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update user" });
+    }
+  });
+
+  // Debit account
+  app.post("/api/admin/debit-account", requireAdmin, async (req, res) => {
+    try {
+      const { accountId, amount, description } = req.body;
+      
+      if (!accountId || !amount || parseFloat(amount) <= 0) {
+        return res.status(400).json({ message: "Invalid account ID or amount" });
+      }
+
+      const account = await storage.getAccount(accountId);
+      if (!account) {
+        return res.status(404).json({ message: "Account not found" });
+      }
+
+      const currentBalance = parseFloat(account.balance || "0");
+      const debitAmount = parseFloat(amount);
+      
+      if (currentBalance < debitAmount) {
+        return res.status(400).json({ message: "Insufficient funds" });
+      }
+      
+      const newBalance = currentBalance - debitAmount;
+
+      await storage.updateAccount(accountId, { balance: newBalance.toFixed(2) });
+
+      // Create transaction record
+      await storage.createTransaction({
+        accountId: accountId,
+        type: "withdrawal",
+        amount: debitAmount.toFixed(2),
+        description: description || `Admin debit - $${debitAmount}`
+      });
+
+      res.json({ 
+        message: "Account debited successfully",
+        newBalance: newBalance.toFixed(2)
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to debit account" });
+    }
+  });
+
+  // Create new account
+  app.post("/api/admin/create-account", requireAdmin, async (req, res) => {
+    try {
+      const { userId, accountType } = req.body;
+      
+      if (!userId || !accountType) {
+        return res.status(400).json({ message: "User ID and account type are required" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Generate account number
+      const timestamp = Date.now().toString().slice(-6);
+      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      const accountNumber = `BOF-${accountType.toUpperCase().slice(0,3)}-${timestamp}${random}`;
+
+      const newAccount = await storage.createAccount({
+        userId: userId,
+        accountNumber: accountNumber,
+        accountType: accountType,
+        balance: "0.00",
+        status: "active"
+      });
+
+      res.json({ 
+        message: "Account created successfully",
+        account: newAccount
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create account" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

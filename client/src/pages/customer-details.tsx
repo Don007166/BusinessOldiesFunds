@@ -63,7 +63,12 @@ export default function CustomerDetails() {
       });
       setCreditAmount("");
       setSelectedAccountId(null);
+      // Invalidate and refetch multiple related queries
       queryClient.invalidateQueries({ queryKey: ["/api/admin/user-accounts", userId] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/user", userId] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/dashboard"] });
     },
     onError: (error: Error) => {
       toast({
