@@ -265,7 +265,10 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                       ))}
-                      <Button className="w-full bg-bof-blue hover:bg-bof-navy">
+                      <Button 
+                        className="w-full bg-bof-blue hover:bg-bof-navy"
+                        onClick={() => setLocation("/admin/customers")}
+                      >
                         View All Customers
                       </Button>
                     </div>
