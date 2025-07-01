@@ -310,6 +310,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get specific user details
+  app.get("/api/admin/user/:userId", requireAdmin, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user details" });
+    }
+  });
+
+  // Get user accounts
+  app.get("/api/admin/user/:userId/accounts", requireAdmin, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const accounts = await storage.getAccountsByUserId(userId);
+      res.json(accounts);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user accounts" });
+    }
+  });
+
+  // Credit account
+  app.post("/api/admin/credit-account", requireAdmin, async (req, res) => {
+    try {
+      const { accountId, amount, description } = req.body;
+      
+      if (!accountId || !amount || parseFloat(amount) <= 0) {
+        return res.status(400).json({ message: "Invalid account ID or amount" });
+      }
+
+      const account = await storage.getAccount(accountId);
+      if (!account) {
+        return res.status(404).json({ message: "Account not found" });
+      }
+
+      // Update account balance
+      const currentBalance = parseFloat(account.balance || "0");
+      const creditAmount = parseFloat(amount);
+      const newBalance = currentBalance + creditAmount;
+
+      await storage.updateAccount(accountId, { balance: newBalance.toFixed(2) });
+
+      // Create transaction record
+      await storage.createTransaction({
+        accountId: accountId,
+        type: "deposit",
+        amount: creditAmount.toFixed(2),
+        description: description || `Admin credit - $${creditAmount}`
+      });
+
+      res.json({ 
+        message: "Account credited successfully",
+        newBalance: newBalance.toFixed(2)
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to credit account" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

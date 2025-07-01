@@ -158,13 +158,28 @@ export default function CustomersList() {
                       </div>
 
                       <div className="flex justify-end space-x-2 mt-6 pt-4 border-t">
-                        <Button size="sm" variant="outline" className="text-blue-600 border-blue-600 hover:bg-blue-50">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                          onClick={() => setLocation(`/admin/customer/${user.id}`)}
+                        >
                           Edit Customer
                         </Button>
-                        <Button size="sm" variant="outline" className="text-green-600 border-green-600 hover:bg-green-50">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="text-green-600 border-green-600 hover:bg-green-50"
+                          onClick={() => setLocation(`/admin/customer/${user.id}`)}
+                        >
                           View Details
                         </Button>
-                        <Button size="sm" variant="outline" className="text-purple-600 border-purple-600 hover:bg-purple-50">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="text-purple-600 border-purple-600 hover:bg-purple-50"
+                          onClick={() => setLocation(`/admin/customer/${user.id}`)}
+                        >
                           Manage Accounts
                         </Button>
                       </div>
