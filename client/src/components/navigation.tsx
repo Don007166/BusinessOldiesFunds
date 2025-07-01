@@ -11,50 +11,70 @@ export default function Navigation() {
 
   return (
     <>
-      <nav className="bg-white border-b border-gray-200 shadow-sm">
+      <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-lg relative z-50">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             {/* Main Navigation */}
-            <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-12">
               <button 
                 onClick={() => setLocation("/")}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-3 group"
               >
-                <div className="w-8 h-8 bg-bof-blue rounded text-white flex items-center justify-center font-bold text-sm">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-white flex items-center justify-center font-bold text-lg shadow-lg group-hover:shadow-xl transition-all duration-200">
                   BOF
                 </div>
-                <span className="text-xl font-bold text-bof-navy">Business Oldies Funds</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                  Business Oldies Funds
+                </span>
               </button>
               
-              <div className="hidden md:flex space-x-6">
-                <a href="#" className="text-bof-blue font-medium border-b-2 border-bof-blue pb-1">Personal</a>
-                <a href="#" className="text-gray-700 hover:text-bof-blue transition-colors">Small Business</a>
-                <a href="#" className="text-gray-700 hover:text-bof-blue transition-colors">Wealth Management</a>
-                <a href="#" className="text-gray-700 hover:text-bof-blue transition-colors">Businesses & Institutions</a>
-                <a href="#" className="text-gray-700 hover:text-bof-blue transition-colors">Security</a>
-                <a href="#" className="text-gray-700 hover:text-bof-blue transition-colors">About Us</a>
+              <div className="hidden lg:flex space-x-8">
+                <a href="#" className="relative text-blue-600 font-semibold pb-2 group">
+                  Personal
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-100 transition-transform duration-200"></div>
+                </a>
+                <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+                  Small Business
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
+                </a>
+                <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+                  Wealth Management
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
+                </a>
+                <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+                  Business Solutions
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
+                </a>
+                <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+                  Security
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
+                </a>
+                <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+                  About Us
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
+                </a>
               </div>
             </div>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-4">
-              <a href="#" className="text-gray-600 hover:text-bof-blue">En español</a>
+            <div className="flex items-center space-x-6">
+              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors text-sm font-medium">En español</a>
               <button 
                 onClick={() => setShowContactModal(true)}
-                className="text-gray-600 hover:text-bof-blue"
+                className="text-gray-600 hover:text-blue-600 transition-colors text-sm font-medium"
               >
                 Contact us
               </button>
-              <a href="#" className="text-gray-600 hover:text-bof-blue">Help</a>
+              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors text-sm font-medium">Help</a>
               <Button 
                 onClick={() => setShowLoginModal(true)}
-                className="bg-bof-blue hover:bg-bof-navy"
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
               >
                 Login
               </Button>
               <Button 
                 onClick={() => setLocation("/admin")}
-                className="bg-bof-red hover:bg-red-700"
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
               >
                 Admin
               </Button>
