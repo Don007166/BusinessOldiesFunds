@@ -105,7 +105,7 @@ export default function CustomersList() {
                           <CardTitle className="text-xl font-bold text-gray-800">
                             {user.firstName} {user.lastName}
                           </CardTitle>
-                          <p className="text-gray-600 mt-1">ID: {user.id} • Username: {user.username}</p>
+                          <p className="text-gray-600 mt-1">ID: {user.driversLicenseNumber} • Username: {user.username}</p>
                         </div>
                         <Badge variant={user.isActive ? "default" : "secondary"}>
                           {user.isActive ? "Active" : "Inactive"}
