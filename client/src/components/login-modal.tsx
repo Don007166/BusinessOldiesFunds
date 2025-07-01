@@ -11,9 +11,10 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSignupSwitch?: () => void;
 }
 
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
+export default function LoginModal({ isOpen, onClose, onSignupSwitch }: LoginModalProps) {
   const [, setLocation] = useLocation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -103,7 +104,16 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           <Button variant="link" className="text-bof-blue hover:underline text-sm">
             Forgot Online ID or Password?
           </Button>
-          <div>
+          <div className="flex justify-center space-x-4">
+            {onSignupSwitch && (
+              <Button 
+                variant="link" 
+                onClick={onSignupSwitch}
+                className="text-bof-blue hover:underline text-sm font-semibold"
+              >
+                Create New Account
+              </Button>
+            )}
             <Button variant="link" className="text-bof-blue hover:underline text-sm">
               Enroll in Online Banking
             </Button>

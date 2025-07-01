@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import LoginModal from "./login-modal";
+import SignupModal from "./signup-modal";
 
 export default function HeroSection() {
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
 
   return (
     <>
@@ -40,20 +42,24 @@ export default function HeroSection() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
-                  onClick={() => setShowLoginModal(true)}
+                  onClick={() => setShowSignupModal(true)}
                   className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
                 >
-                  Get Started Today
+                  Open Account Today
                   <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
                 </Button>
                 
                 <Button 
+                  onClick={() => setShowLoginModal(true)}
                   variant="outline" 
                   className="border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-4 text-lg font-semibold rounded-xl"
                 >
-                  Learn More
+                  Sign In
+                  <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  </svg>
                 </Button>
               </div>
 
@@ -103,7 +109,20 @@ export default function HeroSection() {
 
       <LoginModal 
         isOpen={showLoginModal} 
-        onClose={() => setShowLoginModal(false)} 
+        onClose={() => setShowLoginModal(false)}
+        onSignupSwitch={() => {
+          setShowLoginModal(false);
+          setShowSignupModal(true);
+        }}
+      />
+      
+      <SignupModal 
+        isOpen={showSignupModal} 
+        onClose={() => setShowSignupModal(false)}
+        onLoginSwitch={() => {
+          setShowSignupModal(false);
+          setShowLoginModal(true);
+        }}
       />
     </>
   );

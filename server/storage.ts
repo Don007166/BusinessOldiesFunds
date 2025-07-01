@@ -5,6 +5,7 @@ import {
   admins,
   type User, 
   type InsertUser,
+  type UserSignup,
   type Account,
   type InsertAccount,
   type Transaction,
@@ -12,6 +13,8 @@ import {
   type Admin,
   type InsertAdmin
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -19,6 +22,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  registerUser(signupData: UserSignup): Promise<User>;
   updateUser(id: number, user: Partial<InsertUser>): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
 
@@ -75,46 +79,58 @@ export class MemStorage implements IStorage {
 
   private async initializeSampleData() {
     // Create sample users
-    const user1 = await this.createUser({
+    const user1 = await this.registerUser({
       username: "john.anderson",
       email: "john.anderson@email.com",
       password: "password123",
+      confirmPassword: "password123",
       firstName: "John",
       lastName: "Anderson",
+      dateOfBirth: "1985-06-15",
       phone: "(555) 123-4567",
       address: "123 Main St",
       city: "New York",
       state: "NY",
       zipCode: "10001",
-      isActive: true,
+      driversLicenseNumber: "D123456789",
+      driversLicenseExpiry: "2028-06-15",
+      driversLicenseState: "NY",
     });
 
-    const user2 = await this.createUser({
+    const user2 = await this.registerUser({
       username: "sarah.mitchell",
       email: "sarah.mitchell@email.com",
       password: "password123",
+      confirmPassword: "password123",
       firstName: "Sarah",
       lastName: "Mitchell",
+      dateOfBirth: "1990-03-22",
       phone: "(555) 234-5678",
       address: "456 Oak Ave",
       city: "Los Angeles",
       state: "CA",
       zipCode: "90210",
-      isActive: true,
+      driversLicenseNumber: "D987654321",
+      driversLicenseExpiry: "2027-03-22",
+      driversLicenseState: "CA",
     });
 
-    const user3 = await this.createUser({
+    const user3 = await this.registerUser({
       username: "david.chen",
       email: "david.chen@email.com",
       password: "password123",
+      confirmPassword: "password123",
       firstName: "David",
       lastName: "Chen",
+      dateOfBirth: "1988-11-05",
       phone: "(555) 345-6789",
       address: "789 Pine St",
       city: "Chicago",
       state: "IL",
       zipCode: "60601",
-      isActive: true,
+      driversLicenseNumber: "D456789123",
+      driversLicenseExpiry: "2029-11-05",
+      driversLicenseState: "IL",
     });
 
     // Create sample accounts
@@ -191,6 +207,32 @@ export class MemStorage implements IStorage {
     const user: User = { 
       ...insertUser, 
       id,
+      createdAt: new Date(),
+      isActive: insertUser.isActive ?? true
+    };
+    this.users.set(id, user);
+    return user;
+  }
+
+  async registerUser(signupData: UserSignup): Promise<User> {
+    const id = this.currentUserId++;
+    const user: User = { 
+      id,
+      username: signupData.username,
+      email: signupData.email,
+      password: signupData.password,
+      firstName: signupData.firstName,
+      lastName: signupData.lastName,
+      dateOfBirth: signupData.dateOfBirth,
+      phone: signupData.phone,
+      address: signupData.address,
+      city: signupData.city,
+      state: signupData.state,
+      zipCode: signupData.zipCode,
+      driversLicenseNumber: signupData.driversLicenseNumber,
+      driversLicenseExpiry: signupData.driversLicenseExpiry,
+      driversLicenseState: signupData.driversLicenseState,
+      isActive: true,
       createdAt: new Date()
     };
     this.users.set(id, user);
@@ -288,4 +330,128 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database Storage Implementation
+export class DatabaseStorage implements IStorage {
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  async registerUser(signupData: UserSignup): Promise<User> {
+    // Remove confirmPassword from the data before inserting
+    const { confirmPassword, ...userData } = signupData;
+    
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .returning();
+    return user;
+  }
+
+  async updateUser(id: number, userUpdate: Partial<InsertUser>): Promise<User | undefined> {
+    const [user] = await db
+      .update(users)
+      .set(userUpdate)
+      .where(eq(users.id, id))
+      .returning();
+    return user || undefined;
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return await db.select().from(users);
+  }
+
+  async getAccount(id: number): Promise<Account | undefined> {
+    const [account] = await db.select().from(accounts).where(eq(accounts.id, id));
+    return account || undefined;
+  }
+
+  async getAccountsByUserId(userId: number): Promise<Account[]> {
+    return await db.select().from(accounts).where(eq(accounts.userId, userId));
+  }
+
+  async getAccountByNumber(accountNumber: string): Promise<Account | undefined> {
+    const [account] = await db.select().from(accounts).where(eq(accounts.accountNumber, accountNumber));
+    return account || undefined;
+  }
+
+  async createAccount(insertAccount: InsertAccount): Promise<Account> {
+    const [account] = await db
+      .insert(accounts)
+      .values(insertAccount)
+      .returning();
+    return account;
+  }
+
+  async updateAccount(id: number, accountUpdate: Partial<InsertAccount>): Promise<Account | undefined> {
+    const [account] = await db
+      .update(accounts)
+      .set(accountUpdate)
+      .where(eq(accounts.id, id))
+      .returning();
+    return account || undefined;
+  }
+
+  async getAllAccounts(): Promise<Account[]> {
+    return await db.select().from(accounts);
+  }
+
+  async getTransaction(id: number): Promise<Transaction | undefined> {
+    const [transaction] = await db.select().from(transactions).where(eq(transactions.id, id));
+    return transaction || undefined;
+  }
+
+  async getTransactionsByAccountId(accountId: number): Promise<Transaction[]> {
+    return await db.select().from(transactions).where(eq(transactions.accountId, accountId));
+  }
+
+  async createTransaction(insertTransaction: InsertTransaction): Promise<Transaction> {
+    const [transaction] = await db
+      .insert(transactions)
+      .values(insertTransaction)
+      .returning();
+    return transaction;
+  }
+
+  async getAllTransactions(): Promise<Transaction[]> {
+    return await db.select().from(transactions);
+  }
+
+  async getAdmin(id: number): Promise<Admin | undefined> {
+    const [admin] = await db.select().from(admins).where(eq(admins.id, id));
+    return admin || undefined;
+  }
+
+  async getAdminByUsername(username: string): Promise<Admin | undefined> {
+    const [admin] = await db.select().from(admins).where(eq(admins.username, username));
+    return admin || undefined;
+  }
+
+  async createAdmin(insertAdmin: InsertAdmin): Promise<Admin> {
+    const [admin] = await db
+      .insert(admins)
+      .values(insertAdmin)
+      .returning();
+    return admin;
+  }
+}
+
+export const storage = new DatabaseStorage();
