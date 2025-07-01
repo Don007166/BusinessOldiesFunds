@@ -63,6 +63,19 @@
   animation-delay: 4s;
 }
 
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .8;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 .dark {
   --background: hsl(218, 15%, 8%);
   --foreground: hsl(210, 10%, 98%);

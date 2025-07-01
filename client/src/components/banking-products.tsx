@@ -1,7 +1,28 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import LoginModal from "./login-modal";
+import { useToast } from "@/hooks/use-toast";
 
 export default function BankingProducts() {
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<string>("");
+  const [clickedCard, setClickedCard] = useState<number | null>(null);
+  const { toast } = useToast();
+
+  const handleProductClick = (productType: string, index: number) => {
+    setClickedCard(index);
+    setSelectedProduct(productType);
+    
+    // Reset clicked animation after a short delay
+    setTimeout(() => setClickedCard(null), 300);
+    
+    toast({
+      title: `${productType} Selected! 🏦`,
+      description: "Login to access your premium banking services and exclusive benefits.",
+    });
+    setShowLoginModal(true);
+  };
   const products = [
     {
       icon: (
@@ -83,7 +104,8 @@ export default function BankingProducts() {
           {products.map((product, index) => (
             <Card 
               key={index} 
-              className={`group hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border-0 bg-gradient-to-br ${product.bgColor} shadow-lg relative overflow-hidden`}
+              className={`group hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border-0 bg-gradient-to-br ${product.bgColor} shadow-lg relative overflow-hidden cursor-pointer hover:ring-4 hover:ring-blue-200/50 active:scale-[0.98] ${clickedCard === index ? 'ring-4 ring-blue-400 scale-[1.05]' : ''}`}
+              onClick={() => handleProductClick(product.title, index)}
             >
               <CardContent className="p-8 relative z-10">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/20 to-white/10 rounded-full -mr-12 -mt-12"></div>
@@ -112,7 +134,11 @@ export default function BankingProducts() {
                 </div>
                 
                 <Button 
-                  className={`w-full bg-gradient-to-r ${product.color} text-white hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 font-semibold py-3 rounded-xl border-0`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleProductClick(product.title, index);
+                  }}
+                  className={`w-full bg-gradient-to-r ${product.color} text-white hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95] transition-all duration-200 font-semibold py-3 rounded-xl border-0 hover:shadow-2xl`}
                 >
                   {product.link}
                   <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,6 +150,11 @@ export default function BankingProducts() {
           ))}
         </div>
       </div>
+      
+      <LoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+      />
     </section>
   );
 }
