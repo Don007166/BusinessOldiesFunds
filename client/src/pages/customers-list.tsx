@@ -182,11 +182,13 @@ export default function CustomersList() {
                                       </div>
                                       <div>
                                         <span className="font-medium text-gray-600">Account ID:</span>
-                                        <p className="font-mono text-gray-800">#{account.id}</p>
+                                        <p className="font-mono text-gray-800">{account.accountNumber.replace('BOF-', '').replace(/-/g, '')}</p>
                                       </div>
                                       <div>
                                         <span className="font-medium text-gray-600">Current Balance:</span>
-                                        <p className="font-bold text-gray-800">Available</p>
+                                        <p className="font-bold text-green-600">
+                                          ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Available
+                                        </p>
                                       </div>
                                     </div>
                                   </div>

@@ -317,6 +317,7 @@ export default function ManageAccounts() {
                           >
                             <option value="checking">Checking Account</option>
                             <option value="savings">Savings Account</option>
+                            <option value="investment">Investment Account</option>
                             <option value="business">Business Account</option>
                             <option value="credit">Credit Account</option>
                             <option value="loan">Loan Account</option>
@@ -342,22 +343,31 @@ export default function ManageAccounts() {
                   <CardContent className="p-6">
                     <div className="space-y-4">
                       {(accounts || []).map((account: any) => (
-                        <div key={account.id} className="p-4 border border-gray-200 rounded-lg bg-white">
-                          <div className="flex items-center justify-between">
+                        <div key={account.id} className="p-4 bg-white border-2 border-gray-200 rounded-lg shadow-sm">
+                          <div className="flex items-center justify-between mb-3">
+                            <h4 className="font-bold text-xl text-gray-800">{account.accountType.toUpperCase()} Account</h4>
+                            <span className="text-2xl font-bold text-green-600">
+                              ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3 text-sm">
                             <div>
-                              <h4 className="font-semibold text-lg">{account.accountType.toUpperCase()} Account</h4>
-                              <p className="text-gray-600">Account Number: {account.accountNumber}</p>
-                              <div className="text-gray-600">Status: 
-                                <Badge variant={account.status === 'active' ? "default" : "secondary"} className="ml-2">
-                                  {account.status}
-                                </Badge>
-                              </div>
+                              <span className="font-medium text-gray-600">Account Number:</span>
+                              <p className="font-mono text-gray-800">{account.accountNumber}</p>
                             </div>
-                            <div className="text-right">
-                              <p className="text-2xl font-bold text-green-600">
-                                ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                            <div>
+                              <span className="font-medium text-gray-600">Status:</span>
+                              <p className="font-semibold text-green-600">{account.status.toUpperCase()}</p>
+                            </div>
+                            <div>
+                              <span className="font-medium text-gray-600">Account ID:</span>
+                              <p className="font-mono text-gray-800">{account.accountNumber.replace('BOF-', '').replace(/-/g, '')}</p>
+                            </div>
+                            <div>
+                              <span className="font-medium text-gray-600">Current Balance:</span>
+                              <p className="font-bold text-green-600">
+                                ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Available
                               </p>
-                              <p className="text-sm text-gray-600">Current Balance</p>
                             </div>
                           </div>
                         </div>
