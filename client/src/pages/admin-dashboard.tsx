@@ -74,13 +74,27 @@ export default function AdminDashboard() {
             </div>
             <h1 className="text-xl font-bold">Business Oldies Funds - Admin Dashboard</h1>
           </div>
-          <Button
-            onClick={() => logoutMutation.mutate()}
-            disabled={logoutMutation.isPending}
-            className="bg-white text-bof-red hover:bg-gray-100"
-          >
-            {logoutMutation.isPending ? "Logging out..." : "Logout"}
-          </Button>
+          <div className="flex items-center space-x-4">
+            <Button
+              onClick={() => setLocation("/admin/customers")}
+              className="bg-white text-bof-red hover:bg-gray-100 border-0"
+            >
+              Customers
+            </Button>
+            <Button
+              onClick={() => setLocation("/admin/accounts")}
+              className="bg-white text-bof-red hover:bg-gray-100 border-0"
+            >
+              Accounts
+            </Button>
+            <Button
+              onClick={() => logoutMutation.mutate()}
+              disabled={logoutMutation.isPending}
+              className="bg-white text-bof-red hover:bg-gray-100"
+            >
+              {logoutMutation.isPending ? "Logging out..." : "Logout"}
+            </Button>
+          </div>
         </div>
       </div>
 

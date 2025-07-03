@@ -7,12 +7,17 @@ import { useToast } from "@/hooks/use-toast";
 import { useAdmin } from "@/hooks/useAdmin";
 import { Badge } from "@/components/ui/badge";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import CreditAccountModal from "@/components/credit-account-modal";
+import { User, Account } from "@/lib/types";
 
 export default function CustomersList() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const { admin, isLoading: isAdminLoading } = useAdmin();
   const [cardApplications, setCardApplications] = useState<Record<string, string>>({});
+  const [creditModalOpen, setCreditModalOpen] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [selectedUserName, setSelectedUserName] = useState("");
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -191,6 +196,27 @@ export default function CustomersList() {
                                         </p>
                                       </div>
                                     </div>
+                                    <div className="mt-3 flex gap-2">
+                                      <Button
+                                        size="sm"
+                                        onClick={() => {
+                                          setSelectedAccount(account);
+                                          setSelectedUserName(`${user.firstName} ${user.lastName}`);
+                                          setCreditModalOpen(true);
+                                        }}
+                                        className="bg-green-600 hover:bg-green-700 text-white"
+                                      >
+                                        Credit Account
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => setLocation(`/admin/customer/${user.id}`)}
+                                        className="border-bof-red text-bof-red hover:bg-bof-red hover:text-white"
+                                      >
+                                        View Details
+                                      </Button>
+                                    </div>
                                   </div>
                                 ))
                               ) : (
@@ -287,6 +313,14 @@ export default function CustomersList() {
           )}
         </div>
       </div>
+
+      {/* Credit Account Modal */}
+      <CreditAccountModal
+        isOpen={creditModalOpen}
+        onClose={() => setCreditModalOpen(false)}
+        account={selectedAccount}
+        userFullName={selectedUserName}
+      />
     </div>
   );
 }
