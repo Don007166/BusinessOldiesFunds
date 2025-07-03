@@ -8,6 +8,7 @@ import { useAdmin } from "@/hooks/useAdmin";
 import { Badge } from "@/components/ui/badge";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import CreditAccountModal from "@/components/credit-account-modal";
+import AdminNavigation from "@/components/admin-navigation";
 import { User, Account } from "@/lib/types";
 
 export default function CustomersList() {
@@ -77,6 +78,12 @@ export default function CustomersList() {
     );
   }
 
+  const handleCreditAccount = (account: Account, userFullName: string) => {
+    setSelectedAccount(account);
+    setSelectedUserName(userFullName);
+    setCreditModalOpen(true);
+  };
+
   // Group accounts by user ID for easy lookup
   const accountsByUser = Array.isArray(accounts) ? accounts.reduce((acc: any, account: any) => {
     if (!acc[account.userId]) {
@@ -88,24 +95,7 @@ export default function CustomersList() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-bof-red text-white p-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Button
-              onClick={() => setLocation("/admin/dashboard")}
-              variant="ghost"
-              className="text-white hover:bg-white hover:bg-opacity-20"
-            >
-              ← Back to Dashboard
-            </Button>
-            <div className="w-8 h-8 bg-white rounded text-bof-red flex items-center justify-center font-bold text-sm">
-              BOF
-            </div>
-            <h1 className="text-xl font-bold">Customer Management</h1>
-          </div>
-        </div>
-      </div>
+      <AdminNavigation currentPage="/admin/customers" />
 
       <div className="p-8">
         <div className="max-w-7xl mx-auto">

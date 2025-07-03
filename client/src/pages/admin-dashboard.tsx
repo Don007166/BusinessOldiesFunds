@@ -6,6 +6,14 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useAdmin } from "@/hooks/useAdmin";
+import { DashboardStats, AccountTypes, User } from "@/lib/types";
+
+interface DashboardData {
+  stats: DashboardStats;
+  recentCustomers: User[];
+  accountTypes: AccountTypes;
+  recentTransactions: any[];
+}
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
@@ -26,7 +34,7 @@ export default function AdminDashboard() {
     }
   }, [admin, isAdminLoading, setLocation, toast]);
 
-  const { data: dashboardData, isLoading } = useQuery({
+  const { data: dashboardData, isLoading } = useQuery<DashboardData>({
     queryKey: ["/api/admin/dashboard"],
     enabled: !!admin,
   });
@@ -85,7 +93,13 @@ export default function AdminDashboard() {
               onClick={() => setLocation("/admin/accounts")}
               className="bg-white text-bof-red hover:bg-gray-100 border-0"
             >
-              Accounts
+              Manage Accounts
+            </Button>
+            <Button
+              onClick={() => setLocation("/admin/cards")}
+              className="bg-white text-bof-red hover:bg-gray-100 border-0"
+            >
+              Card Services
             </Button>
             <Button
               onClick={() => logoutMutation.mutate()}
@@ -103,7 +117,7 @@ export default function AdminDashboard() {
           {/* Welcome Message */}
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome, {admin?.username || 'Admin'}
+              Welcome, {(admin as any)?.username || 'Admin'}
             </h2>
             <p className="text-gray-600">Manage your banking operations from this dashboard.</p>
           </div>

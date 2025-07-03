@@ -29,26 +29,26 @@ export default function Navigation() {
               </button>
               
               <div className="hidden lg:flex space-x-8">
-                <a href="#" className="relative text-blue-600 font-semibold pb-2 group">
+                <button onClick={() => setLocation("/")} className="relative text-blue-600 font-semibold pb-2 group">
                   Personal
                   <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-100 transition-transform duration-200"></div>
-                </a>
-                <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+                </button>
+                <button onClick={() => setLocation("/")} className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
                   Small Business
                   <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
-                </a>
-                <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+                </button>
+                <button onClick={() => setLocation("/")} className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
                   Wealth Management
                   <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
-                </a>
-                <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+                </button>
+                <button onClick={() => setLocation("/")} className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
                   Business Solutions
                   <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
-                </a>
-                <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
-                  Security
+                </button>
+                <button onClick={() => setShowContactModal(true)} className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+                  Contact Us
                   <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
-                </a>
+                </button>
                 <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
                   About Us
                   <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
