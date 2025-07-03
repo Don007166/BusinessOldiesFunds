@@ -15,6 +15,7 @@ export const users = pgTable("users", {
   city: text("city").notNull(),
   state: text("state").notNull(),
   zipCode: text("zip_code").notNull(),
+  country: text("country").notNull(),
   driversLicenseNumber: text("drivers_license_number").notNull(),
   driversLicenseExpiry: text("drivers_license_expiry").notNull(),
   driversLicenseState: text("drivers_license_state").notNull(),

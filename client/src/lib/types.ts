@@ -9,6 +9,8 @@ export interface User {
   city?: string;
   state?: string;
   zipCode?: string;
+  country?: string;
+  dateOfBirth?: string;
   isActive: boolean;
   createdAt: Date;
 }
@@ -17,6 +19,7 @@ export interface Account {
   id: number;
   userId: number;
   accountNumber: string;
+  accountIdDisplay?: string;
   accountType: string;
   balance: string;
   status: string;

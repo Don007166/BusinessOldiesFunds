@@ -152,6 +152,7 @@ export default function CustomersList() {
                             <p><span className="font-medium">Phone:</span> {user.phone}</p>
                             <p><span className="font-medium">Address:</span> {user.address}</p>
                             <p><span className="font-medium">City:</span> {user.city}, {user.state} {user.zipCode}</p>
+                            <p><span className="font-medium">Country:</span> {user.country}</p>
                             <p><span className="font-medium">Date of Birth:</span> {user.dateOfBirth}</p>
                           </div>
                         </div>
@@ -187,7 +188,7 @@ export default function CustomersList() {
                                       </div>
                                       <div>
                                         <span className="font-medium text-gray-600">Account ID:</span>
-                                        <p className="font-mono text-gray-800">ACC{account.id.toString().padStart(6, '0')}</p>
+                                        <p className="font-mono text-gray-800">{account.accountIdDisplay || `ACC${account.id.toString().padStart(6, '0')}`}</p>
                                       </div>
                                       <div>
                                         <span className="font-medium text-gray-600">Current Balance:</span>
