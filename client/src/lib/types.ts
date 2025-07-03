@@ -56,3 +56,17 @@ export interface AccountTypes {
   business: number;
   loan: number;
 }
+
+export interface Card {
+  id: number;
+  userId: number;
+  cardType: string;
+  cardNumber: string;
+  cardHolderName: string;
+  expiryMonth: string;
+  expiryYear: string;
+  cvv: string;
+  status: string;
+  appliedAt: Date;
+  issuedAt?: Date;
+}

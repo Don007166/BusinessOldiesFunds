@@ -54,8 +54,14 @@ export const cards = pgTable("cards", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
   cardType: text("card_type").notNull(), // 'debit' or 'credit'
-  status: text("status").notNull().default("processing"), // 'processing', 'approved', 'declined'
+  cardNumber: text("card_number").notNull(), // Masked card number
+  cardHolderName: text("card_holder_name").notNull(),
+  expiryMonth: text("expiry_month").notNull(),
+  expiryYear: text("expiry_year").notNull(),
+  cvv: text("cvv").notNull(),
+  status: text("status").notNull().default("processing"), // 'processing', 'approved', 'declined', 'active'
   appliedAt: timestamp("applied_at").defaultNow(),
+  issuedAt: timestamp("issued_at"),
 });
 
 export const insertUserSchema = createInsertSchema(users).omit({
