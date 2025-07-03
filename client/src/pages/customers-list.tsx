@@ -187,7 +187,7 @@ export default function CustomersList() {
                                       </div>
                                       <div>
                                         <span className="font-medium text-gray-600">Account ID:</span>
-                                        <p className="font-mono text-gray-800">{account.accountNumber.replace('BOF-', '').replace(/-/g, '')}</p>
+                                        <p className="font-mono text-gray-800">ACC{account.id.toString().padStart(6, '0')}</p>
                                       </div>
                                       <div>
                                         <span className="font-medium text-gray-600">Current Balance:</span>
@@ -224,44 +224,17 @@ export default function CustomersList() {
                               )}
                               
                               {/* Card Application Section */}
-                              <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                              <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg">
                                 <h5 className="font-bold text-gray-800 mb-2">Card Services</h5>
                                 <div className="flex flex-wrap gap-2">
                                   <Button 
                                     size="sm" 
-                                    variant="outline" 
-                                    className="text-blue-600 border-blue-600 hover:bg-blue-100"
+                                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700"
                                     onClick={() => {
-                                      cardApplicationMutation.mutate({
-                                        userId: user.id,
-                                        cardType: 'debit'
-                                      });
-                                      setCardApplications(prev => ({
-                                        ...prev,
-                                        [`${user.id}-debit`]: 'processing'
-                                      }));
+                                      setLocation(`/admin/cards?userId=${user.id}`);
                                     }}
-                                    disabled={cardApplications[`${user.id}-debit`] === 'processing' || cardApplicationMutation.isPending}
                                   >
-                                    {cardApplications[`${user.id}-debit`] === 'processing' ? 'Card in Processing' : 'Apply for Debit Card'}
-                                  </Button>
-                                  <Button 
-                                    size="sm" 
-                                    variant="outline" 
-                                    className="text-purple-600 border-purple-600 hover:bg-purple-100"
-                                    onClick={() => {
-                                      cardApplicationMutation.mutate({
-                                        userId: user.id,
-                                        cardType: 'credit'
-                                      });
-                                      setCardApplications(prev => ({
-                                        ...prev,
-                                        [`${user.id}-credit`]: 'processing'
-                                      }));
-                                    }}
-                                    disabled={cardApplications[`${user.id}-credit`] === 'processing' || cardApplicationMutation.isPending}
-                                  >
-                                    {cardApplications[`${user.id}-credit`] === 'processing' ? 'Card in Processing' : 'Apply for Credit Card'}
+                                    Apply for Cards
                                   </Button>
                                 </div>
                               </div>

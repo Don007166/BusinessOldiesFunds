@@ -337,6 +337,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Card application
+  app.post("/api/admin/apply-card", requireAdmin, async (req, res) => {
+    try {
+      const { userId, cardType, cardName } = req.body;
+      
+      if (!userId || !cardType) {
+        return res.status(400).json({ message: "Invalid user ID or card type" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Simulate card processing
+      const applicationId = `APP-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      
+      res.json({ 
+        message: "Card application submitted successfully",
+        applicationId,
+        cardName: cardName || cardType,
+        deliveryAddress: `${user.address}, ${user.city}, ${user.state} ${user.zipCode}`,
+        estimatedDelivery: "7-10 business days"
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to process card application" });
+    }
+  });
+
   // Credit account
   app.post("/api/admin/credit-account", requireAdmin, async (req, res) => {
     try {

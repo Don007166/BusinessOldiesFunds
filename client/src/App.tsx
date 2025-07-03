@@ -10,6 +10,7 @@ import CustomersList from "@/pages/customers-list";
 import CustomerDetails from "@/pages/customer-details";
 import EditCustomer from "@/pages/edit-customer";
 import ManageAccounts from "@/pages/manage-accounts";
+import CardServices from "@/pages/card-services";
 import UserDashboard from "@/pages/user-dashboard";
 import NotFound from "@/pages/not-found";
 
@@ -21,9 +22,11 @@ function Router() {
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/customers" component={CustomersList} />
       <Route path="/admin/accounts" component={ManageAccounts} />
+      <Route path="/admin/cards" component={CardServices} />
       <Route path="/admin/customer/:userId" component={CustomerDetails} />
       <Route path="/admin/customer/:userId/edit" component={EditCustomer} />
       <Route path="/admin/customer/:userId/accounts" component={ManageAccounts} />
+      <Route path="/admin/customer/:userId/cards" component={CardServices} />
       <Route path="/dashboard" component={UserDashboard} />
       <Route component={NotFound} />
     </Switch>
