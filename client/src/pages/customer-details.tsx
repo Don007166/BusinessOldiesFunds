@@ -1,113 +1,30 @@
-import { useEffect, useState } from "react";
-import { useLocation, useParams } from "wouter";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { useAdmin } from "@/hooks/useAdmin";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { CreditCard, ArrowLeft, User, MapPin, Calendar, Phone, Mail } from "lucide-react";
 
 export default function CustomerDetails() {
-  const [, setLocation] = useLocation();
-  const { userId } = useParams();
-  const { toast } = useToast();
-  const { admin, isLoading: isAdminLoading } = useAdmin();
-  const [creditAmount, setCreditAmount] = useState("");
-  const [selectedAccountId, setSelectedAccountId] = useState<number | null>(null);
-
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!isAdminLoading && !admin) {
-      toast({
-        title: "Unauthorized",
-        description: "You are not logged in as admin. Redirecting to login...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        setLocation("/admin");
-      }, 1000);
-    }
-  }, [admin, isAdminLoading, setLocation, toast]);
+  const [location, setLocation] = useLocation();
+  const userId = location.split('/')[3]; // Extract user ID from URL
 
   const { data: user, isLoading: userLoading } = useQuery({
-    queryKey: ["/api/admin/user", userId],
-    queryFn: async () => {
-      const response = await fetch(`/api/admin/user/${userId}`);
-      if (!response.ok) throw new Error('Failed to fetch user');
-      return response.json();
-    },
-    enabled: !!admin && !!userId,
+    queryKey: ['/api/admin/user', userId],
+    enabled: !!userId
   });
 
   const { data: accounts, isLoading: accountsLoading } = useQuery({
-    queryKey: ["/api/admin/user-accounts", userId],
-    queryFn: async () => {
-      const response = await fetch(`/api/admin/user/${userId}/accounts`);
-      if (!response.ok) throw new Error('Failed to fetch accounts');
-      return response.json();
-    },
-    enabled: !!admin && !!userId,
+    queryKey: ['/api/admin/user', userId, 'accounts'],
+    enabled: !!userId
   });
 
-  const creditMutation = useMutation({
-    mutationFn: async (data: { accountId: number; amount: string; description: string }) => {
-      return await apiRequest("POST", `/api/admin/credit-account`, data);
-    },
-    onSuccess: () => {
-      toast({
-        title: "Credit Successful",
-        description: "Account has been credited successfully.",
-      });
-      setCreditAmount("");
-      setSelectedAccountId(null);
-      // Invalidate and refetch multiple related queries
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/user-accounts", userId] });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/user", userId] });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/accounts"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/dashboard"] });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Credit Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
+  const { data: cards, isLoading: cardsLoading } = useQuery({
+    queryKey: ['/api/admin/user', userId, 'cards'],
+    enabled: !!userId
   });
 
-  const handleCredit = () => {
-    if (!selectedAccountId || !creditAmount || parseFloat(creditAmount) <= 0) {
-      toast({
-        title: "Invalid Input",
-        description: "Please select an account and enter a valid amount.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    creditMutation.mutate({
-      accountId: selectedAccountId,
-      amount: creditAmount,
-      description: `Admin credit - ${creditAmount}`
-    });
-  };
-
-  if (isAdminLoading || !admin) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-bof-blue mx-auto mb-4"></div>
-          <p>Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (userLoading || accountsLoading) {
+  if (userLoading || accountsLoading || cardsLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -117,6 +34,24 @@ export default function CustomerDetails() {
       </div>
     );
   }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Customer Not Found</h2>
+          <p className="text-gray-600 mb-4">The requested customer could not be found.</p>
+          <Button onClick={() => setLocation("/admin/customers")}>
+            Back to Customers
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const totalBalance = Array.isArray(accounts) ? accounts.reduce((sum: number, account: any) => {
+    return sum + parseFloat(account.balance || "0");
+  }, 0) : 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -129,7 +64,8 @@ export default function CustomerDetails() {
               variant="ghost"
               className="text-white hover:bg-white hover:bg-opacity-20"
             >
-              ← Back to Customers
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Customers
             </Button>
             <div className="w-8 h-8 bg-white rounded text-bof-red flex items-center justify-center font-bold text-sm">
               BOF
@@ -141,143 +77,114 @@ export default function CustomerDetails() {
 
       <div className="p-8">
         <div className="max-w-7xl mx-auto">
-          {user && (
-            <>
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          {/* Customer Header */}
+          <div className="mb-8">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-16 h-16 bg-bof-blue rounded-full flex items-center justify-center">
+                <User className="h-8 w-8 text-white" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900">
                   {user.firstName} {user.lastName}
                 </h2>
-                <p className="text-gray-600">Customer ID: {user.id}</p>
+                <p className="text-gray-600">@{user.username}</p>
+                <Badge variant={user.isActive ? "default" : "secondary"}>
+                  {user.isActive ? "Active" : "Inactive"}
+                </Badge>
               </div>
+            </div>
+          </div>
 
-              <div className="grid md:grid-cols-2 gap-8">
-                {/* Customer Information */}
-                <Card className="shadow-lg">
-                  <CardHeader className="bg-gradient-to-r from-gray-50 to-white">
-                    <CardTitle className="text-xl font-bold text-gray-800">Customer Information</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="font-medium text-gray-700">First Name</Label>
-                          <p className="text-gray-900">{user.firstName}</p>
-                        </div>
-                        <div>
-                          <Label className="font-medium text-gray-700">Last Name</Label>
-                          <p className="text-gray-900">{user.lastName}</p>
-                        </div>
-                      </div>
-                      <div>
-                        <Label className="font-medium text-gray-700">Email</Label>
-                        <p className="text-gray-900">{user.email}</p>
-                      </div>
-                      <div>
-                        <Label className="font-medium text-gray-700">Phone</Label>
-                        <p className="text-gray-900">{user.phone}</p>
-                      </div>
-                      <div>
-                        <Label className="font-medium text-gray-700">Date of Birth</Label>
-                        <p className="text-gray-900">{user.dateOfBirth}</p>
-                      </div>
-                      <div>
-                        <Label className="font-medium text-gray-700">Address</Label>
-                        <p className="text-gray-900">{user.address}</p>
-                        <p className="text-gray-900">{user.city}, {user.state} {user.zipCode}</p>
-                      </div>
-                      <div>
-                        <Label className="font-medium text-gray-700">Status</Label>
-                        <Badge variant={user.isActive ? "default" : "secondary"} className="ml-2">
-                          {user.isActive ? "Active" : "Inactive"}
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Admin Actions */}
-                <Card className="shadow-lg">
-                  <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50">
-                    <CardTitle className="text-xl font-bold text-gray-800">Admin Actions</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="font-semibold text-gray-800 mb-3">Credit Account</h4>
-                        <div className="space-y-4">
-                          <div>
-                            <Label>Select Account</Label>
-                            <select
-                              className="w-full p-2 border border-gray-300 rounded-md"
-                              value={selectedAccountId || ""}
-                              onChange={(e) => setSelectedAccountId(Number(e.target.value))}
-                            >
-                              <option value="">Select an account...</option>
-                              {(accounts || []).map((account: any) => (
-                                <option key={account.id} value={account.id}>
-                                  {account.accountType.toUpperCase()} - {account.accountNumber} 
-                                  (Balance: ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2})})
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                          <div>
-                            <Label>Credit Amount ($)</Label>
-                            <Input
-                              type="number"
-                              step="0.01"
-                              min="0"
-                              value={creditAmount}
-                              onChange={(e) => setCreditAmount(e.target.value)}
-                              placeholder="Enter amount to credit"
-                            />
-                          </div>
-                          <Button
-                            onClick={handleCredit}
-                            disabled={creditMutation.isPending || !selectedAccountId || !creditAmount}
-                            className="w-full bg-green-600 hover:bg-green-700"
-                          >
-                            {creditMutation.isPending ? "Processing..." : "Credit Account"}
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Accounts Information */}
-              <Card className="mt-8 shadow-lg">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
-                  <CardTitle className="text-xl font-bold text-gray-800">Customer Accounts</CardTitle>
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Customer Information */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Contact Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <User className="h-5 w-5 mr-2" />
+                    Contact Information
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="p-6">
-                  <div className="grid gap-4">
-                    {(accounts || []).map((account: any) => (
-                      <div key={account.id} className="p-4 bg-white border-2 border-gray-200 rounded-lg shadow-sm">
+                <CardContent className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="flex items-center space-x-3">
+                      <Mail className="h-4 w-4 text-gray-500" />
+                      <div>
+                        <p className="text-sm text-gray-500">Email</p>
+                        <p className="font-medium">{user.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Phone className="h-4 w-4 text-gray-500" />
+                      <div>
+                        <p className="text-sm text-gray-500">Phone</p>
+                        <p className="font-medium">{user.phone || "Not provided"}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Calendar className="h-4 w-4 text-gray-500" />
+                      <div>
+                        <p className="text-sm text-gray-500">Date of Birth</p>
+                        <p className="font-medium">{user.dateOfBirth}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <MapPin className="h-4 w-4 text-gray-500" />
+                      <div>
+                        <p className="text-sm text-gray-500">Address</p>
+                        <p className="font-medium">{user.address}</p>
+                        <p className="text-sm text-gray-600">
+                          {user.city}, {user.state} {user.zipCode}
+                        </p>
+                        <p className="text-sm text-gray-600">{user.country}</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Account Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Account Information</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-green-800">Total Balance</span>
+                      <span className="text-green-600 font-bold text-2xl">
+                        ${totalBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    {Array.isArray(accounts) && accounts.map((account: any) => (
+                      <div key={account.id} className="p-4 border border-gray-200 rounded-lg">
                         <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-bold text-xl text-gray-800">{account.accountType.toUpperCase()} Account</h4>
-                          <span className="text-2xl font-bold text-green-600">
-                            ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
-                          </span>
+                          <h4 className="font-semibold text-gray-800 capitalize">
+                            {account.accountType.replace('_', ' ')} Account
+                          </h4>
+                          <Badge variant={account.status === 'active' ? 'default' : 'secondary'}>
+                            {account.status.toUpperCase()}
+                          </Badge>
                         </div>
-                        <div className="grid grid-cols-2 gap-3 text-sm">
+                        <div className="grid md:grid-cols-3 gap-4 text-sm">
                           <div>
-                            <span className="font-medium text-gray-600">Account Number:</span>
-                            <p className="font-mono text-gray-800">{account.accountNumber}</p>
+                            <span className="text-gray-500">Account Number</span>
+                            <p className="font-mono font-medium">{account.accountNumber}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-gray-600">Status:</span>
-                            <p className="font-semibold text-green-600">{account.status.toUpperCase()}</p>
+                            <span className="text-gray-500">Account ID</span>
+                            <p className="font-mono font-medium">
+                              {account.accountIdDisplay || `ACC${account.id.toString().padStart(6, '0')}`}
+                            </p>
                           </div>
                           <div>
-                            <span className="font-medium text-gray-600">Account ID:</span>
-                            <p className="font-mono text-gray-800">{account.accountIdDisplay || 'ACC-' + Math.random().toString().slice(2, 10)}</p>
-                          </div>
-                          <div>
-                            <span className="font-medium text-gray-600">Available Balance:</span>
-                            <p className="font-bold text-green-600">
-                              ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Available
+                            <span className="text-gray-500">Balance</span>
+                            <p className="font-bold text-lg text-green-600">
+                              ${parseFloat(account.balance || "0").toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                             </p>
                           </div>
                         </div>
@@ -286,8 +193,102 @@ export default function CustomerDetails() {
                   </div>
                 </CardContent>
               </Card>
-            </>
-          )}
+            </div>
+
+            {/* Cards Section */}
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <CreditCard className="h-5 w-5 mr-2" />
+                    Payment Cards
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {Array.isArray(cards) && cards.length > 0 ? (
+                    <div className="space-y-4">
+                      {cards.map((card: any) => (
+                        <div key={card.id} className="relative">
+                          {/* Card Design */}
+                          <div className="relative w-full h-48 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-xl shadow-xl overflow-hidden">
+                            {/* Card Background Pattern */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent"></div>
+                            <div className="absolute top-4 right-4 w-8 h-8 bg-white bg-opacity-20 rounded-full"></div>
+                            <div className="absolute top-6 right-6 w-4 h-4 bg-white bg-opacity-30 rounded-full"></div>
+                            
+                            {/* Card Content */}
+                            <div className="relative z-10 p-6 h-full flex flex-col justify-between text-white">
+                              {/* Top Section */}
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <div className="text-xs font-medium opacity-80 mb-1">
+                                    BUSINESS DEBIT
+                                  </div>
+                                  <div className="w-8 h-5 bg-yellow-400 rounded-sm"></div>
+                                </div>
+                                <div className="text-right">
+                                  <div className="text-xs opacity-80">BANK OF FINANCE</div>
+                                  <div className="text-xs font-bold">BOF</div>
+                                </div>
+                              </div>
+
+                              {/* Card Number */}
+                              <div className="text-center">
+                                <div className="text-lg font-mono tracking-wider">
+                                  {card.card_number}
+                                </div>
+                              </div>
+
+                              {/* Bottom Section */}
+                              <div className="flex items-end justify-between">
+                                <div>
+                                  <div className="text-xs opacity-80 mb-1">CARDHOLDER</div>
+                                  <div className="text-sm font-medium">
+                                    {card.cardholder_name}
+                                  </div>
+                                </div>
+                                <div className="text-right">
+                                  <div className="text-xs opacity-80 mb-1">EXPIRES</div>
+                                  <div className="text-sm font-medium">{card.expiry_date}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Card Details */}
+                          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                              <div>
+                                <span className="text-gray-500">Card Type</span>
+                                <p className="font-medium capitalize">
+                                  {card.card_type.replace('_', ' ')}
+                                </p>
+                              </div>
+                              <div>
+                                <span className="text-gray-500">CVV</span>
+                                <p className="font-mono font-medium">{card.cvv}</p>
+                              </div>
+                              <div>
+                                <span className="text-gray-500">Status</span>
+                                <Badge variant={card.status === 'active' ? 'default' : 'secondary'} className="ml-2">
+                                  {card.status.toUpperCase()}
+                                </Badge>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-gray-500">
+                      <CreditCard className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>No payment cards found</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>

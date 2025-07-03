@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { userSignupSchema, userLoginSchema, adminLoginSchema, cards } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import session from "express-session";
 
 // Telegram notification function
@@ -334,6 +334,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(accounts);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch user accounts" });
+    }
+  });
+
+  // Get user cards
+  app.get("/api/admin/user/:userId/cards", requireAdmin, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const result = await db.execute(sql`
+        SELECT * FROM cards WHERE user_id = ${userId}
+      `);
+      res.json(result.rows);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user cards" });
     }
   });
 
