@@ -11,6 +11,9 @@ export interface User {
   zipCode?: string;
   country?: string;
   dateOfBirth?: string;
+  driversLicenseNumber?: string;
+  driversLicenseExpiry?: string;
+  driversLicenseState?: string;
   isActive: boolean;
   createdAt: Date;
 }

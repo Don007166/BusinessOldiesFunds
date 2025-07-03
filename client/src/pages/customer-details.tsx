@@ -95,8 +95,31 @@ export default function CustomerDetails() {
           <div className="bg-white rounded-lg shadow-lg p-8 mb-8 border-l-4 border-bof-blue">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-bof-blue to-bof-navy rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg">
-                  {user.firstName?.charAt(0)}{user.lastName?.charAt(0)}
+                <div className="w-20 h-20 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                  <svg className="w-full h-full" viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#006" d="M0 0h640v480H0z"/>
+                    <path fill="#fff" d="M0 0h320v240H0z"/>
+                    <path fill="#c8102e" d="M120 0h80v240h-80zM0 80h320v80H0z"/>
+                    <path fill="#006" d="M160 20h40v40h-40zM40 60h40v40H40zM240 60h40v40h-40zM40 140h40v40H40zM240 140h40v40h-40zM160 180h40v40h-40z"/>
+                    <g fill="#fff">
+                      <path d="M0 0v40l240 180v-40L40 0H0zM0 40v40l200 150v-40L40 40H0z"/>
+                      <path d="M320 0v40L80 220v-40L280 0h40zM320 40v40L120 230v-40L280 40h40z"/>
+                    </g>
+                    <path fill="#c8102e" d="M0 20h320v20H0zM0 200h320v20H0z"/>
+                    <g fill="#006">
+                      <circle r="40" cx="480" cy="150"/>
+                      <circle r="16" cx="480" cy="150" fill="#c8102e"/>
+                      <circle r="6" cx="480" cy="150" fill="#fff"/>
+                    </g>
+                    <g fill="#ffd100">
+                      <path d="M420 90l15 30h30l-24 18 9 30-30-22-30 22 9-30-24-18h30z"/>
+                      <path d="M540 90l15 30h30l-24 18 9 30-30-22-30 22 9-30-24-18h30z"/>
+                      <path d="M420 210l15 30h30l-24 18 9 30-30-22-30 22 9-30-24-18h30z"/>
+                      <path d="M540 210l15 30h30l-24 18 9 30-30-22-30 22 9-30-24-18h30z"/>
+                      <path d="M480 60l15 30h30l-24 18 9 30-30-22-30 22 9-30-24-18h30z"/>
+                      <path d="M600 150l15 30h30l-24 18 9 30-30-22-30 22 9-30-24-18h30z"/>
+                    </g>
+                  </svg>
                 </div>
                 <div>
                   <h1 className="text-4xl font-bold text-gray-900 mb-2">
@@ -109,7 +132,7 @@ export default function CustomerDetails() {
                     </Badge>
                   </div>
                   <div className="flex items-center space-x-6 text-sm text-gray-500">
-                    <span>Customer ID: {userId}</span>
+                    <span>Customer ID: 99201</span>
                     <span>License: {user.driversLicenseNumber}</span>
                   </div>
                 </div>

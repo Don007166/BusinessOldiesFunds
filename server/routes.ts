@@ -344,7 +344,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const result = await db.execute(sql`
         SELECT * FROM cards WHERE user_id = ${userId}
       `);
-      res.json(result.rows);
+      
+      // Transform field names from snake_case to camelCase
+      const transformedCards = result.rows.map((card: any) => ({
+        id: card.id,
+        userId: card.user_id,
+        cardType: card.card_type,
+        cardNumber: card.card_number,
+        cardHolderName: card.card_holder_name,
+        expiryMonth: card.expiry_month,
+        expiryYear: card.expiry_year,
+        cvv: card.cvv,
+        status: card.status,
+        appliedAt: card.applied_at,
+        issuedAt: card.issued_at
+      }));
+      
+      res.json(transformedCards);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch user cards" });
     }
