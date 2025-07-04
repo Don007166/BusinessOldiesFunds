@@ -219,11 +219,13 @@ export default function CustomerDetails() {
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center space-x-3">
                               <div className="w-10 h-10 bg-bof-blue rounded-full flex items-center justify-center text-white font-bold">
-                                {account.accountType === 'business_checking' ? 'BC' : 'BS'}
+                                {account.accountType === 'business' ? 'BC' : 'BS'}
                               </div>
                               <div>
-                                <div className="font-semibold text-gray-900 capitalize">
-                                  {account.accountType.replace('_', ' ')}
+                                <div className="font-semibold text-gray-900">
+                                  {account.accountType === 'business' ? 'Business Checkings Account' : 
+                                   account.accountType === 'savings' ? 'Business Savings' : 
+                                   account.accountType.replace('_', ' ')}
                                 </div>
                                 <div className="text-sm text-gray-500">Account {account.accountNumber}</div>
                               </div>

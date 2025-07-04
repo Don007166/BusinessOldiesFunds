@@ -265,7 +265,9 @@ export default function ManageAccounts() {
                             <option value="">Select an account...</option>
                             {(accounts || []).map((account: any) => (
                               <option key={account.id} value={account.id}>
-                                {account.accountType.toUpperCase()} - {account.accountNumber} 
+                                {account.accountType === 'business' ? 'Business Checkings' : 
+                                 account.accountType === 'savings' ? 'Business Savings' : 
+                                 account.accountType.toUpperCase()} - {account.accountNumber} 
                                 (${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2})})
                               </option>
                             ))}
@@ -366,7 +368,11 @@ export default function ManageAccounts() {
                       {(accounts || []).map((account: any) => (
                         <div key={account.id} className="p-4 bg-white border-2 border-gray-200 rounded-lg shadow-sm">
                           <div className="flex items-center justify-between mb-3">
-                            <h4 className="font-bold text-xl text-gray-800">{account.accountType.toUpperCase()} Account</h4>
+                            <h4 className="font-bold text-xl text-gray-800">
+                              {account.accountType === 'business' ? 'Business Checkings Account' : 
+                               account.accountType === 'savings' ? 'Business Savings' : 
+                               account.accountType.toUpperCase() + ' Account'}
+                            </h4>
                             <span className="text-2xl font-bold text-green-600">
                               ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                             </span>

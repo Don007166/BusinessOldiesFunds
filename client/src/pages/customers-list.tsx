@@ -162,7 +162,11 @@ export default function CustomersList() {
                                 userAccounts.map((account: any) => (
                                   <div key={account.id} className="p-4 bg-white border-2 border-gray-200 rounded-lg shadow-sm">
                                     <div className="flex items-center justify-between mb-2">
-                                      <h5 className="font-bold text-lg text-gray-800">{account.accountType.toUpperCase()} Account</h5>
+                                      <h5 className="font-bold text-lg text-gray-800">
+                                        {account.accountType === 'business' ? 'Business Checkings Account' : 
+                                         account.accountType === 'savings' ? 'Business Savings' : 
+                                         account.accountType.toUpperCase() + ' Account'}
+                                      </h5>
                                       <span className="text-2xl font-bold text-green-600">
                                         ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                                       </span>
