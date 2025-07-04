@@ -2,8 +2,6 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { userSignupSchema, userLoginSchema, adminLoginSchema, cards } from "@shared/schema";
-import { db } from "./db";
-import { eq, sql } from "drizzle-orm";
 import session from "express-session";
 
 // Telegram notification function
@@ -341,26 +339,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/user/:userId/cards", requireAdmin, async (req, res) => {
     try {
       const userId = parseInt(req.params.userId);
-      const result = await db.execute(sql`
-        SELECT * FROM cards WHERE user_id = ${userId}
-      `);
-      
-      // Transform field names from snake_case to camelCase
-      const transformedCards = result.rows.map((card: any) => ({
-        id: card.id,
-        userId: card.user_id,
-        cardType: card.card_type,
-        cardNumber: card.card_number,
-        cardHolderName: card.card_holder_name,
-        expiryMonth: card.expiry_month,
-        expiryYear: card.expiry_year,
-        cvv: card.cvv,
-        status: card.status,
-        appliedAt: card.applied_at,
-        issuedAt: card.issued_at
-      }));
-      
-      res.json(transformedCards);
+      const userCards = await storage.getCardsByUserId(userId);
+      res.json(userCards);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch user cards" });
     }
@@ -542,15 +522,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Insert card application directly into database
-      const [cardApplication] = await db
-        .insert(cards)
-        .values({
-          userId: userId,
-          cardType: cardType,
-          status: "processing"
-        })
-        .returning();
+      // Create card application using storage
+      const cardApplication = await storage.createCard({
+        userId: userId,
+        cardType: cardType,
+        cardNumber: "****0000", // Placeholder, would be generated
+        cardHolderName: user.firstName + " " + user.lastName,
+        expiryMonth: "12",
+        expiryYear: "2029",
+        cvv: "000",
+        status: "processing"
+      });
 
       res.json({ 
         message: "Card application submitted successfully",
@@ -565,12 +547,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/user/:userId/cards", requireAdmin, async (req, res) => {
     try {
       const userId = parseInt(req.params.userId);
-      
-      const userCards = await db
-        .select()
-        .from(cards)
-        .where(eq(cards.userId, userId));
-
+      const userCards = await storage.getCardsByUserId(userId);
       res.json(userCards);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch card applications" });
