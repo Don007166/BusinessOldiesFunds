@@ -291,6 +291,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Complete dashboard data with all transactions
+  app.get("/api/dashboard", async (req, res) => {
+    const userId = (req.session as any)?.userId;
+    if (!userId) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    try {
+      const user = await storage.getUser(userId);
+      const accounts = await storage.getAccountsByUserId(userId);
+      
+      const accountsWithTransactions = await Promise.all(
+        accounts.map(async (account) => {
+          const transactions = await storage.getTransactionsByAccountId(account.id);
+          return {
+            ...account,
+            transactions: transactions // All transactions
+          };
+        })
+      );
+
+      res.json({
+        user: {
+          firstName: user?.firstName,
+          lastName: user?.lastName
+        },
+        accounts: accountsWithTransactions
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch dashboard data" });
+    }
+  });
+
   // Admin user management
   app.get("/api/admin/users", requireAdmin, async (req, res) => {
     try {
