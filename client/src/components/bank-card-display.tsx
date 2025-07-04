@@ -47,27 +47,23 @@ export default function BankCardDisplay({ card, className = "" }: BankCardDispla
         </div>
 
         {/* Bank Logo and Name */}
-        <div className="relative z-10 flex items-center justify-between mb-8">
+        <div className="relative z-10 flex items-start justify-between mb-8">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center font-bold text-lg">
-              BOF
+            <div className="w-14 h-10 bg-yellow-500 rounded-lg flex items-center justify-center font-bold text-black text-sm">
+              CHKDB
             </div>
             <div>
               <div className="text-lg font-bold">Business Oldies Funds</div>
               <div className="text-sm opacity-80">{getCardTypeName(card.cardType)}</div>
             </div>
           </div>
-          
-          {/* Card Type Badge */}
-          <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold">
-            {card.status.toUpperCase()}
-          </div>
         </div>
 
         {/* Card Number */}
         <div className="relative z-10 mb-6">
-          <div className="text-2xl font-mono font-bold tracking-wider">
-            **** **** **** {card.cardNumber}
+          <div className="text-2xl font-mono font-bold tracking-wider flex items-center">
+            <span className="text-yellow-400 mr-3">****</span>
+            <span className="text-white">**** **** {card.cardNumber}</span>
           </div>
         </div>
 
