@@ -39,51 +39,80 @@ export default function BankCardDisplay({ card, className = "" }: BankCardDispla
   return (
     <div className={`relative w-96 h-60 ${className}`}>
       <div className={`w-full h-full bg-gradient-to-br ${getCardTypeColor(card.cardType)} rounded-2xl shadow-2xl p-6 text-white relative overflow-hidden`}>
-        {/* Background Pattern */}
+        {/* Background Pattern with Statue of Liberty */}
         <div className="absolute inset-0 opacity-10">
+          {/* Liberty Statue Silhouette */}
+          <div className="absolute right-8 bottom-8 w-24 h-32 opacity-30">
+            <svg viewBox="0 0 100 120" className="w-full h-full fill-white">
+              <path d="M50 10 L48 20 L52 20 Z"/>
+              <path d="M45 18 L55 18 L58 25 L42 25 Z"/>
+              <path d="M40 25 L60 25 L62 35 L38 35 Z"/>
+              <path d="M38 35 L62 35 L65 50 L35 50 Z"/>
+              <path d="M35 50 L65 50 L68 70 L32 70 Z"/>
+              <path d="M32 70 L68 70 L70 90 L30 90 Z"/>
+              <path d="M30 90 L70 90 L75 110 L25 110 Z"/>
+              <rect x="25" y="110" width="50" height="10"/>
+              {/* Torch */}
+              <path d="M60 15 L65 12 L67 18 L62 21 Z"/>
+            </svg>
+          </div>
+          
+          {/* Premium geometric patterns */}
           <div className="absolute top-4 right-4 w-32 h-32 rounded-full border-2 border-white/20"></div>
           <div className="absolute bottom-4 left-4 w-24 h-24 rounded-full border-2 border-white/20"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full border border-white/10"></div>
+          
+          {/* Additional premium elements */}
+          <div className="absolute top-16 left-8 w-16 h-16 border border-white/15 rotate-45"></div>
+          <div className="absolute bottom-16 right-16 w-12 h-12 border border-white/15 rotate-12"></div>
         </div>
 
         {/* Bank Logo and Name */}
         <div className="relative z-10 flex items-start justify-between mb-8">
           <div className="flex items-center space-x-3">
-            <div className="w-14 h-10 bg-yellow-500 rounded-lg flex items-center justify-center font-bold text-black text-sm">
-              CHKDB
+            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center font-bold text-lg">
+              BOF
             </div>
             <div>
               <div className="text-lg font-bold">Business Oldies Funds</div>
               <div className="text-sm opacity-80">{getCardTypeName(card.cardType)}</div>
             </div>
           </div>
+          
+          {/* CHKDB Badge */}
+          <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold">
+            CHKDB
+          </div>
         </div>
 
         {/* Card Number */}
         <div className="relative z-10 mb-6">
-          <div className="text-2xl font-mono font-bold tracking-wider flex items-center">
-            <span className="text-yellow-400 mr-3">****</span>
-            <span className="text-white">**** **** {card.cardNumber}</span>
+          <div className="text-2xl font-mono font-bold tracking-wider">
+            <span className="bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent mr-3">****</span>
+            <span className="text-white drop-shadow-lg">**** **** {card.cardNumber}</span>
           </div>
         </div>
 
         {/* Card Details */}
         <div className="relative z-10 flex items-end justify-between">
           <div>
-            <div className="text-xs opacity-70 mb-1">CARD HOLDER</div>
-            <div className="text-sm font-semibold">{card.cardHolderName}</div>
+            <div className="text-xs opacity-70 mb-1 tracking-wider">CARD HOLDER</div>
+            <div className="text-sm font-bold tracking-wide">{card.cardHolderName}</div>
           </div>
           
           <div className="text-right">
-            <div className="text-xs opacity-70 mb-1">EXPIRES</div>
-            <div className="text-sm font-semibold font-mono">{card.expiryMonth}/{card.expiryYear}</div>
+            <div className="text-xs opacity-70 mb-1 tracking-wider">EXPIRES</div>
+            <div className="text-sm font-bold font-mono tracking-wider">{card.expiryMonth}/{card.expiryYear}</div>
           </div>
           
           <div className="text-right">
-            <div className="text-xs opacity-70 mb-1">CVV</div>
-            <div className="text-sm font-semibold font-mono">{card.cvv}</div>
+            <div className="text-xs opacity-70 mb-1 tracking-wider">CVV</div>
+            <div className="text-sm font-bold font-mono tracking-wider">{card.cvv}</div>
           </div>
         </div>
+        
+        {/* Premium Holographic Strip */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 via-white to-yellow-400 opacity-60"></div>
 
         {/* Chip */}
         <div className="absolute top-24 left-6 w-12 h-9 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg shadow-lg"></div>
