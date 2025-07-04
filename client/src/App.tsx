@@ -12,6 +12,7 @@ import EditCustomer from "@/pages/edit-customer";
 import ManageAccounts from "@/pages/manage-accounts";
 import CardServices from "@/pages/card-services";
 import UserDashboard from "@/pages/user-dashboard";
+import TransactionHistory from "@/pages/transaction-history";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/admin/customer/:userId/accounts" component={ManageAccounts} />
       <Route path="/admin/customer/:userId/cards" component={CardServices} />
       <Route path="/dashboard" component={UserDashboard} />
+      <Route path="/transactions" component={TransactionHistory} />
       <Route component={NotFound} />
     </Switch>
   );

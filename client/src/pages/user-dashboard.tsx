@@ -147,8 +147,15 @@ export default function UserDashboard() {
 
               {/* Recent Transactions */}
               <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle>Recent Transactions</CardTitle>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setLocation("/transactions")}
+                    className="bg-bof-blue text-white hover:bg-bof-navy"
+                  >
+                    View All History
+                  </Button>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">

@@ -74,6 +74,120 @@ export class MemStorage implements IStorage {
     this.initializeSampleData();
   }
 
+  private generateTransactionHistory() {
+    const merchants = [
+      "WALMART SUPERCENTER", "AMAZON.COM", "TARGET STORE", "STARBUCKS", "SHELL GAS STATION",
+      "MCDONALD'S", "COSTCO WHOLESALE", "HOME DEPOT", "CVS PHARMACY", "GROCERY OUTLET",
+      "NETFLIX.COM", "SPOTIFY", "APPLE ITUNES", "MICROSOFT", "ADOBE SYSTEMS",
+      "UBER TRIP", "LYFT RIDE", "AIRBNB", "HOTELS.COM", "BOOKING.COM",
+      "BEST BUY", "GAMESTOP", "VICTORIA'S SECRET", "H&M", "ZARA",
+      "CHIPOTLE MEXICAN", "TACO BELL", "SUBWAY", "DOMINO'S PIZZA", "KFC",
+      "EXXON MOBIL", "CHEVRON", "BP GAS STATION", "TEXACO", "CIRCLE K",
+      "WALGREENS", "RITE AID", "WHOLE FOODS", "TRADER JOE'S", "SAFEWAY",
+      "FEDEX OFFICE", "UPS STORE", "USPS", "DHL EXPRESS", "AMAZON DELIVERY",
+      "VERIZON WIRELESS", "AT&T", "T-MOBILE", "COMCAST", "SPECTRUM",
+      "ELECTRIC COMPANY", "WATER DEPARTMENT", "GAS UTILITY", "INTERNET PROVIDER",
+      "MORTGAGE PAYMENT", "CAR PAYMENT", "INSURANCE PREMIUM", "CREDIT CARD PAYMENT"
+    ];
+
+    const transactionTypes = [
+      { type: "card_purchase", prefix: "CARD PURCHASE" },
+      { type: "transfer", prefix: "TRANSFER" },
+      { type: "atm_withdrawal", prefix: "ATM WITHDRAWAL" },
+      { type: "direct_deposit", prefix: "DIRECT DEPOSIT" },
+      { type: "online_payment", prefix: "ONLINE PAYMENT" },
+      { type: "bill_payment", prefix: "BILL PAYMENT" },
+      { type: "check_deposit", prefix: "CHECK DEPOSIT" }
+    ];
+
+    let transactionId = 1;
+    const startDate = new Date('2020-01-01');
+    const endDate = new Date();
+    
+    // Generate transactions for both accounts
+    [1, 2].forEach(accountId => {
+      let currentDate = new Date(startDate);
+      let runningBalance = accountId === 1 ? 50000 : 30000; // Starting balances
+      
+      while (currentDate <= endDate) {
+        // Generate 5-15 transactions per month
+        const transactionsThisMonth = Math.floor(Math.random() * 11) + 5;
+        
+        for (let i = 0; i < transactionsThisMonth; i++) {
+          const randomDay = Math.floor(Math.random() * 28) + 1;
+          const transactionDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), randomDay);
+          
+          if (transactionDate > endDate) break;
+          
+          const transactionTypeData = transactionTypes[Math.floor(Math.random() * transactionTypes.length)];
+          const merchant = merchants[Math.floor(Math.random() * merchants.length)];
+          
+          let amount: number;
+          let type: string;
+          let description: string;
+          
+          // Generate realistic transaction amounts and descriptions
+          if (transactionTypeData.type === "atm_withdrawal") {
+            amount = Math.floor(Math.random() * 400) + 20; // $20-$420
+            type = "withdrawal";
+            description = `${transactionTypeData.prefix} - REF:${this.generateReference()}`;
+          } else if (transactionTypeData.type === "direct_deposit") {
+            amount = Math.floor(Math.random() * 3000) + 1500; // $1500-$4500
+            type = "deposit";
+            description = `${transactionTypeData.prefix} - SALARY - REF:${this.generateReference()}`;
+            runningBalance += amount;
+          } else if (transactionTypeData.type === "card_purchase") {
+            amount = Math.floor(Math.random() * 300) + 5; // $5-$305
+            type = "withdrawal";
+            description = `${transactionTypeData.prefix} - ${merchant} - REF:${this.generateReference()}`;
+          } else if (transactionTypeData.type === "transfer") {
+            amount = Math.floor(Math.random() * 1000) + 50; // $50-$1050
+            type = Math.random() > 0.5 ? "deposit" : "withdrawal";
+            description = `${transactionTypeData.prefix} - ${type === "deposit" ? "FROM" : "TO"} ACCOUNT - REF:${this.generateReference()}`;
+            if (type === "deposit") runningBalance += amount;
+          } else {
+            amount = Math.floor(Math.random() * 200) + 10; // $10-$210
+            type = "withdrawal";
+            description = `${transactionTypeData.prefix} - ${merchant} - REF:${this.generateReference()}`;
+          }
+          
+          if (type === "withdrawal") {
+            runningBalance -= amount;
+          }
+          
+          // Ensure balance doesn't go negative
+          if (runningBalance < 0) {
+            runningBalance += amount;
+            continue;
+          }
+          
+          const transaction: Transaction = {
+            id: transactionId++,
+            accountId: accountId,
+            type: type as "deposit" | "withdrawal",
+            amount: amount.toFixed(2),
+            description: description,
+            timestamp: new Date(transactionDate)
+          };
+          
+          this.transactions.set(transaction.id, transaction);
+        }
+        
+        // Move to next month
+        currentDate.setMonth(currentDate.getMonth() + 1);
+      }
+    });
+  }
+
+  private generateReference(): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < 12; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+
   private async initializeSampleData() {
     // Create admin user
     const admin: Admin = {
@@ -135,27 +249,9 @@ export class MemStorage implements IStorage {
     this.accounts.set(2, savingsAccount);
     this.currentAccountId = 3;
 
-    // Create sample transactions
-    const transaction1: Transaction = {
-      id: 1,
-      accountId: 1,
-      type: "deposit",
-      amount: "5000.00",
-      description: "Initial deposit",
-      timestamp: new Date('2024-01-15')
-    };
-    this.transactions.set(1, transaction1);
-
-    const transaction2: Transaction = {
-      id: 2,
-      accountId: 2,
-      type: "deposit",
-      amount: "10000.00",
-      description: "Savings deposit",
-      timestamp: new Date('2024-01-16')
-    };
-    this.transactions.set(2, transaction2);
-    this.currentTransactionId = 3;
+    // Generate comprehensive transaction history from 2020 to present
+    this.generateTransactionHistory();
+    this.currentTransactionId = this.transactions.size + 1;
 
     // Create sample card for Kelly Ann James
     const businessCard: Card = {
