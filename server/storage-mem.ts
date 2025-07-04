@@ -113,10 +113,10 @@ export class MemStorage implements IStorage {
     const businessAccount: Account = {
       id: 1,
       userId: 2,
-      accountNumber: "12345678547854",
-      accountIdDisplay: "****7854",
+      accountNumber: "301847562983741",
+      accountIdDisplay: "****3741",
       accountType: "business",
-      balance: "25000.00",
+      balance: "125750.00",
       status: "active",
       createdAt: new Date('2024-01-15')
     };
@@ -125,10 +125,10 @@ export class MemStorage implements IStorage {
     const savingsAccount: Account = {
       id: 2,
       userId: 2,
-      accountNumber: "98765432109326",
-      accountIdDisplay: "****9326",
+      accountNumber: "507291648357962",
+      accountIdDisplay: "****7962",
       accountType: "savings",
-      balance: "50000.00",
+      balance: "89340.00",
       status: "active",
       createdAt: new Date('2024-01-15')
     };
@@ -162,7 +162,7 @@ export class MemStorage implements IStorage {
       id: 1,
       userId: 2,
       cardType: "debit",
-      cardNumber: "****5847",
+      cardNumber: "3741",
       cardHolderName: "KELLY ANN JAMES",
       expiryMonth: "08",
       expiryYear: "2029",
