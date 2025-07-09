@@ -1,6 +1,7 @@
 import Navigation from "@/components/navigation";
 import HeroSection from "@/components/hero-section";
 import BankingProducts from "@/components/banking-products";
+import CardProducts from "@/components/card-products";
 import PromotionalSection from "@/components/promotional-section";
 import MobileBanking from "@/components/mobile-banking";
 import Footer from "@/components/footer";
@@ -27,6 +28,7 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <BankingProducts />
+      <CardProducts />
       <PromotionalSection />
       <MobileBanking />
       

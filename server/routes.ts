@@ -324,6 +324,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public card application endpoint
+  app.post("/api/card-application", async (req, res) => {
+    try {
+      const { cardApplicationSchema } = await import("@shared/schema");
+      const applicationData = cardApplicationSchema.parse(req.body);
+      
+      // Generate a reference number for the application
+      const referenceNumber = `BOF-${Date.now().toString().slice(-8)}`;
+      
+      // In a real application, you would save this to a database
+      // For now, we'll just return a success response
+      console.log("Card application received:", {
+        ...applicationData,
+        referenceNumber,
+        timestamp: new Date()
+      });
+
+      res.json({
+        message: "Card application submitted successfully",
+        referenceNumber,
+        status: "processing",
+        estimatedProcessingTime: "1-2 business days"
+      });
+    } catch (error: any) {
+      if (error.errors) {
+        return res.status(400).json({ 
+          message: "Validation failed", 
+          errors: error.errors 
+        });
+      }
+      console.error("Card application error:", error);
+      res.status(500).json({ message: "Failed to submit card application" });
+    }
+  });
+
   // Admin user management
   app.get("/api/admin/users", requireAdmin, async (req, res) => {
     try {

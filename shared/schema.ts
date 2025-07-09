@@ -114,6 +114,26 @@ export const adminLoginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+export const cardApplicationSchema = z.object({
+  cardType: z.string().min(1, "Please select a card type"),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Please enter a valid phone number"),
+  dateOfBirth: z.string().min(1, "Date of birth is required"),
+  address: z.string().min(1, "Address is required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(1, "State is required"),
+  zipCode: z.string().min(5, "Please enter a valid ZIP code"),
+  income: z.string().min(1, "Annual income is required"),
+  employment: z.string().min(1, "Employment status is required"),
+  deliveryAddress: z.string().min(1, "Delivery address is required"),
+  deliveryCity: z.string().min(1, "Delivery city is required"),
+  deliveryState: z.string().min(1, "Delivery state is required"),
+  deliveryZipCode: z.string().min(5, "Please enter a valid delivery ZIP code"),
+  agreeToTerms: z.boolean().refine(val => val === true, "You must agree to the terms and conditions")
+});
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type UserSignup = z.infer<typeof userSignupSchema>;
@@ -125,6 +145,7 @@ export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
 export type Admin = typeof admins.$inferSelect;
 export type InsertAdmin = z.infer<typeof insertAdminSchema>;
 export type AdminLogin = z.infer<typeof adminLoginSchema>;
+export type CardApplication = z.infer<typeof cardApplicationSchema>;
 
 export const insertCardSchema = createInsertSchema(cards).omit({
   id: true,
