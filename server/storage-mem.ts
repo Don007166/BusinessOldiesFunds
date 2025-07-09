@@ -253,7 +253,7 @@ export class MemStorage implements IStorage {
     this.generateTransactionHistory();
     this.currentTransactionId = this.transactions.size + 1;
 
-    // Create sample card for Kelly Ann James
+    // Create sample cards for Kelly Ann James
     const businessCard: Card = {
       id: 1,
       userId: 2,
@@ -268,7 +268,22 @@ export class MemStorage implements IStorage {
       issuedAt: new Date('2024-01-20')
     };
     this.cards.set(1, businessCard);
-    this.currentCardId = 2;
+
+    const savingsCard: Card = {
+      id: 2,
+      userId: 2,
+      cardType: "savings",
+      cardNumber: "9326",
+      cardHolderName: "KELLY ANN JAMES",
+      expiryMonth: "12",
+      expiryYear: "2028",
+      cvv: "582",
+      status: "active",
+      appliedAt: new Date('2024-02-01'),
+      issuedAt: new Date('2024-02-05')
+    };
+    this.cards.set(2, savingsCard);
+    this.currentCardId = 3;
   }
 
   async getUser(id: number): Promise<User | undefined> {

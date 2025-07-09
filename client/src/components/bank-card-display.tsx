@@ -16,6 +16,8 @@ export default function BankCardDisplay({ card, className = "" }: BankCardDispla
         return 'from-purple-800 to-purple-900';
       case 'debit':
         return 'from-green-800 to-green-900';
+      case 'savings':
+        return 'from-emerald-700 to-teal-800';
       default:
         return 'from-gray-800 to-gray-900';
     }
@@ -31,6 +33,8 @@ export default function BankCardDisplay({ card, className = "" }: BankCardDispla
         return 'Credit Card';
       case 'debit':
         return 'Debit Card';
+      case 'savings':
+        return 'Savings Card';
       default:
         return 'Bank Card';
     }
@@ -39,22 +43,36 @@ export default function BankCardDisplay({ card, className = "" }: BankCardDispla
   return (
     <div className={`relative w-96 h-60 ${className}`}>
       <div className={`w-full h-full bg-gradient-to-br ${getCardTypeColor(card.cardType)} rounded-2xl shadow-2xl p-6 text-white relative overflow-hidden`}>
-        {/* Background Pattern with Statue of Liberty */}
+        {/* Background Pattern with different icons based on card type */}
         <div className="absolute inset-0 opacity-10">
-          {/* Liberty Statue Silhouette */}
+          {/* Different icons for different card types */}
           <div className="absolute right-8 bottom-8 w-24 h-32 opacity-30">
-            <svg viewBox="0 0 100 120" className="w-full h-full fill-white">
-              <path d="M50 10 L48 20 L52 20 Z"/>
-              <path d="M45 18 L55 18 L58 25 L42 25 Z"/>
-              <path d="M40 25 L60 25 L62 35 L38 35 Z"/>
-              <path d="M38 35 L62 35 L65 50 L35 50 Z"/>
-              <path d="M35 50 L65 50 L68 70 L32 70 Z"/>
-              <path d="M32 70 L68 70 L70 90 L30 90 Z"/>
-              <path d="M30 90 L70 90 L75 110 L25 110 Z"/>
-              <rect x="25" y="110" width="50" height="10"/>
-              {/* Torch */}
-              <path d="M60 15 L65 12 L67 18 L62 21 Z"/>
-            </svg>
+            {card.cardType === 'savings' ? (
+              /* Savings - Tree/Growth Symbol */
+              <svg viewBox="0 0 100 120" className="w-full h-full fill-white">
+                <circle cx="50" cy="30" r="20"/>
+                <circle cx="35" cy="45" r="15"/>
+                <circle cx="65" cy="45" r="15"/>
+                <circle cx="30" cy="65" r="12"/>
+                <circle cx="70" cy="65" r="12"/>
+                <rect x="48" y="70" width="4" height="30"/>
+                <rect x="45" y="90" width="10" height="20"/>
+                <path d="M40 110 L60 110 L65 120 L35 120 Z"/>
+              </svg>
+            ) : (
+              /* Business - Statue of Liberty */
+              <svg viewBox="0 0 100 120" className="w-full h-full fill-white">
+                <path d="M50 10 L48 20 L52 20 Z"/>
+                <path d="M45 18 L55 18 L58 25 L42 25 Z"/>
+                <path d="M40 25 L60 25 L62 35 L38 35 Z"/>
+                <path d="M38 35 L62 35 L65 50 L35 50 Z"/>
+                <path d="M35 50 L65 50 L68 70 L32 70 Z"/>
+                <path d="M32 70 L68 70 L70 90 L30 90 Z"/>
+                <path d="M30 90 L70 90 L75 110 L25 110 Z"/>
+                <rect x="25" y="110" width="50" height="10"/>
+                <path d="M60 15 L65 12 L67 18 L62 21 Z"/>
+              </svg>
+            )}
           </div>
           
           {/* Premium geometric patterns */}
