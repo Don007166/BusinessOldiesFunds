@@ -33,6 +33,8 @@ export default function CreditAccountModal({ isOpen, onClose, account, userFullN
       queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/accounts"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/user-accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/user-cards"] });
       onClose();
       setAmount("");
       setDescription("");
