@@ -229,7 +229,7 @@ export default function CustomerDetails() {
                                    account.accountType.replace('_', ' ')}
                                 </div>
                                 <div className="text-sm text-gray-500">Account {account.accountNumber}</div>
-                                <div className="text-sm font-medium text-bof-blue">Account ID: {account.accountIdDisplay}</div>
+                                <div className="text-sm font-medium text-bof-blue">Account ID: {account.accountIdDisplay?.replace('****', '')}</div>
                               </div>
                             </div>
                             <div className="text-right">
