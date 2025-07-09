@@ -17,7 +17,7 @@ export default function BankCardDisplay({ card, className = "" }: BankCardDispla
       case 'debit':
         return 'from-green-800 to-green-900';
       case 'savings':
-        return 'from-emerald-700 to-teal-800';
+        return 'from-purple-700 to-indigo-800';
       default:
         return 'from-gray-800 to-gray-900';
     }
@@ -97,9 +97,9 @@ export default function BankCardDisplay({ card, className = "" }: BankCardDispla
             </div>
           </div>
           
-          {/* CHKDB Badge */}
+          {/* Card Type Badge */}
           <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold">
-            CHKDB
+            {card.cardType === 'savings' ? 'SVGSK' : 'CHKDB'}
           </div>
         </div>
 
