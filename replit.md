@@ -149,7 +149,7 @@ Changelog:
   - Successfully migrated from Replit Agent to standard Replit environment
   - Fixed Account ID display to show unique identifiers (7854 for business, 9326 for savings)
   - Enhanced cache invalidation system for real-time balance updates
-  - Updated business checking account balance to $200,750.00 after admin credits
+  - Updated business checking account balance to $410,750.00 after admin credits ($235,000 credit applied)
   - Created additional savings card for Kelly Ann James:
     * Card number: ****9326 (matching savings account ID)
     * Purple-indigo gradient design with tree/growth symbol
