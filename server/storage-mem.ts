@@ -230,7 +230,7 @@ export class MemStorage implements IStorage {
       accountNumber: "301847562983741",
       accountIdDisplay: "****7854",
       accountType: "business",
-      balance: "125750.00",
+      balance: "130750.00",
       status: "active",
       createdAt: new Date('2024-01-15')
     };
