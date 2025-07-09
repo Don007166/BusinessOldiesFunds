@@ -45,8 +45,10 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
               <div>
                 <p className="font-medium text-bof-navy">Address</p>
                 <p className="text-sm text-gray-600">
-                  8666 Nolan Loop<br />
-                  Belton, Texas 76513
+                  Business Oldies Funds<br />
+                  7720 Collins Street<br />
+                  Melbourne, VIC 3000<br />
+                  Australia
                 </p>
               </div>
             </div>

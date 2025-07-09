@@ -95,7 +95,7 @@ Changelog:
 - June 30, 2025. Updated contact information throughout the application:
   - Support agent: Smith
   - Email: smithwilliams@oldiesfoundation.info
-  - Address: 8666 Nolan Loop, Belton Texas 76513
+  - Address: Business Oldies Funds, 7720 Collins Street, Melbourne VIC 3000, Australia
   - Created professional contact modal for better user experience
 - June 30, 2025. Added total balance display to admin dashboard:
   - Shows $100,000,000.00 as requested

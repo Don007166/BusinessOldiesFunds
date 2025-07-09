@@ -105,7 +105,7 @@ export default function Home() {
                 <p className="font-medium text-bof-navy mb-1">Contact Information:</p>
                 <p><strong>Agent:</strong> Smith</p>
                 <p><strong>Email:</strong> smithwilliams@oldiesfoundation.info</p>
-                <p><strong>Address:</strong> 8666 Nolan Loop<br />Belton, Texas 76513</p>
+                <p><strong>Address:</strong> Business Oldies Funds<br />7720 Collins Street<br />Melbourne, VIC 3000, Australia</p>
               </div>
             </div>
           </div>
