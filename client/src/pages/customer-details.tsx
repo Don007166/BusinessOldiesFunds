@@ -7,6 +7,7 @@ import { CreditCard, ArrowLeft, User, MapPin, Calendar, Phone, Mail, Building2, 
 import BankCardDisplay from "@/components/bank-card-display";
 import AdminNavigation from "@/components/admin-navigation";
 import { User as UserType, Account, Card as CardType } from "@/lib/types";
+import { formatCurrency } from "@/lib/utils";
 
 export default function CustomerDetails() {
   const [, setLocation] = useLocation();
@@ -140,7 +141,7 @@ export default function CustomerDetails() {
               <div className="text-right">
                 <div className="text-sm text-gray-500 mb-1">Total Balance</div>
                 <div className="text-3xl font-bold text-green-600">
-                  ${totalBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                  {formatCurrency(totalBalance)}
                 </div>
               </div>
             </div>
@@ -232,7 +233,7 @@ export default function CustomerDetails() {
                             </div>
                             <div className="text-right">
                               <div className="text-2xl font-bold text-gray-900">
-                                ${parseFloat(account.balance || "0").toLocaleString('en-US', {minimumFractionDigits: 2})}
+                                {formatCurrency(account.balance || "0")}
                               </div>
                               <Badge className="bg-green-100 text-green-800 border-green-200">
                                 {account.status}

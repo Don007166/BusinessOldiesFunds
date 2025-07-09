@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useAdmin } from "@/hooks/useAdmin";
 import { DashboardStats, AccountTypes, User } from "@/lib/types";
+import { formatCurrency } from "@/lib/utils";
 
 interface DashboardData {
   stats: DashboardStats;
@@ -136,7 +137,7 @@ export default function AdminDashboard() {
                     <div className="flex items-center justify-between">
                       <div>
                         <h2 className="text-white text-lg font-medium mb-2">Total Bank Balance</h2>
-                        <p className="text-white text-4xl font-bold">${dashboardData?.stats?.totalBalance?.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) || '100,000,000.00'}</p>
+                        <p className="text-white text-4xl font-bold">{formatCurrency(dashboardData?.stats?.totalBalance || 100000000)}</p>
                         <p className="text-green-100 text-sm mt-2">All accounts combined</p>
                       </div>
                       <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">

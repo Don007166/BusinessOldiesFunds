@@ -10,6 +10,7 @@ import { ArrowLeft, Search, Filter, Download, Calendar, CreditCard, ArrowUpDown,
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { useToast } from "@/hooks/use-toast";
+import { formatCurrency } from "@/lib/utils";
 
 interface UserAuth {
   user: any;
@@ -243,10 +244,9 @@ export default function TransactionHistory() {
                 <div>
                   <p className="text-sm text-gray-600">Total Deposits</p>
                   <p className="text-2xl font-bold text-green-600">
-                    ${filteredTransactions
+                    {formatCurrency(filteredTransactions
                       .filter(t => t.type === 'deposit')
-                      .reduce((sum, t) => sum + parseFloat(t.amount), 0)
-                      .toFixed(2)}
+                      .reduce((sum, t) => sum + parseFloat(t.amount), 0))}
                   </p>
                 </div>
                 <ArrowDown className="w-8 h-8 text-green-600" />
@@ -260,10 +260,9 @@ export default function TransactionHistory() {
                 <div>
                   <p className="text-sm text-gray-600">Total Withdrawals</p>
                   <p className="text-2xl font-bold text-red-600">
-                    ${filteredTransactions
+                    {formatCurrency(filteredTransactions
                       .filter(t => t.type === 'withdrawal')
-                      .reduce((sum, t) => sum + parseFloat(t.amount), 0)
-                      .toFixed(2)}
+                      .reduce((sum, t) => sum + parseFloat(t.amount), 0))}
                   </p>
                 </div>
                 <ArrowUp className="w-8 h-8 text-red-600" />
@@ -318,7 +317,7 @@ export default function TransactionHistory() {
                       <p className={`text-lg font-bold ${
                         transaction.type === 'deposit' ? 'text-green-600' : 'text-red-600'
                       }`}>
-                        {transaction.type === 'deposit' ? '+' : '-'}${parseFloat(transaction.amount).toFixed(2)}
+                        {transaction.type === 'deposit' ? '+' : '-'}{formatCurrency(transaction.amount).replace('$', '')}
                       </p>
                       <p className="text-sm text-gray-500 capitalize">{transaction.type}</p>
                     </div>

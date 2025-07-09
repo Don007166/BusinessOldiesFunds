@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { formatCurrency } from "@/lib/utils";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import ContactModal from "@/components/contact-modal";
@@ -133,7 +134,7 @@ export default function UserDashboard() {
                     <CardContent>
                       <div className="space-y-2">
                         <p className="text-sm text-gray-600">Account Number: {account.accountNumber}</p>
-                        <p className="text-2xl font-bold text-bof-navy">${parseFloat(account.balance).toFixed(2)}</p>
+                        <p className="text-2xl font-bold text-bof-navy">{formatCurrency(account.balance)}</p>
                         <div className="pt-2">
                           <Button size="sm" className="w-full bg-bof-blue hover:bg-bof-navy">
                             View Details
@@ -193,7 +194,7 @@ export default function UserDashboard() {
                               <p className={`font-semibold ${
                                 transaction.type === 'deposit' ? 'text-green-600' : 'text-red-600'
                               }`}>
-                                {transaction.type === 'deposit' ? '+' : '-'}${parseFloat(transaction.amount).toFixed(2)}
+                                {transaction.type === 'deposit' ? '+' : '-'}{formatCurrency(transaction.amount).replace('$', '')}
                               </p>
                             </div>
                           </div>

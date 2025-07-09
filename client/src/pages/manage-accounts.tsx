@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAdmin } from "@/hooks/useAdmin";
 import { Badge } from "@/components/ui/badge";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { formatCurrency } from "@/lib/utils";
 
 export default function ManageAccounts() {
   const [, setLocation] = useLocation();
@@ -268,7 +269,7 @@ export default function ManageAccounts() {
                                 {account.accountType === 'business' ? 'Business Checkings' : 
                                  account.accountType === 'savings' ? 'Business Savings' : 
                                  account.accountType.toUpperCase()} - {account.accountNumber} 
-                                (${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2})})
+                                ({formatCurrency(account.balance || '0')})
                               </option>
                             ))}
                           </select>
@@ -374,7 +375,7 @@ export default function ManageAccounts() {
                                account.accountType.toUpperCase() + ' Account'}
                             </h4>
                             <span className="text-2xl font-bold text-green-600">
-                              ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                              {formatCurrency(account.balance || '0')}
                             </span>
                           </div>
                           <div className="grid grid-cols-2 gap-3 text-sm">
@@ -393,7 +394,7 @@ export default function ManageAccounts() {
                             <div>
                               <span className="font-medium text-gray-600">Available Balance:</span>
                               <p className="font-bold text-green-600">
-                                ${parseFloat(account.balance || '0').toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Available
+                                {formatCurrency(account.balance || '0')} Available
                               </p>
                             </div>
                           </div>
