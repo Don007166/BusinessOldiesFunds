@@ -91,7 +91,12 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-bof-navy mb-2">Schedule Appointment</h3>
               <p className="text-gray-600 mb-4">Meet with our banking experts at your convenience</p>
-              <button className="text-bof-blue font-semibold hover:underline">Schedule now →</button>
+              <a 
+                href="mailto:smithwilliams@oldiesfoundation.info?subject=Appointment%20Request%20-%20Business%20Oldies%20Funds&body=Dear%20Smith%2C%0A%0AI%20would%20like%20to%20schedule%20an%20appointment%20with%20one%20of%20your%20banking%20experts.%0A%0APlease%20provide%20the%20following%20appointment%20details%3A%0A%0APreferred%20Date%3A%20%5BPlease%20specify%5D%0APreferred%20Time%3A%20%5BPlease%20specify%5D%0AAppointment%20Type%3A%20%5BIn-person%20%2F%20Phone%20%2F%20Video%20call%5D%0ALocation%20Preference%3A%20%5BIf%20in-person%2C%20specify%20branch%20or%20head%20office%5D%0APurpose%20of%20Visit%3A%20%5BAccount%20opening%2C%20loan%20inquiry%2C%20investment%20advice%2C%20etc.%5D%0AContact%20Phone%3A%20%5BYour%20phone%20number%5D%0A%0AAdditional%20Notes%3A%0A%5BAny%20specific%20questions%20or%20requirements%5D%0A%0AThank%20you%20for%20your%20assistance.%0A%0ABest%20regards%2C%0A%5BYour%20Name%5D"
+                className="text-bof-blue font-semibold hover:underline"
+              >
+                Schedule now →
+              </a>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
