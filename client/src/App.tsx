@@ -17,6 +17,7 @@ import HomeLoans from "@/pages/home-loans";
 import AutoLoans from "@/pages/auto-loans";
 import PersonalLoans from "@/pages/personal-loans";
 import CreditCards from "@/pages/credit-cards";
+import BusinessLoans from "@/pages/business-loans";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -38,6 +39,7 @@ function Router() {
       <Route path="/auto-loans" component={AutoLoans} />
       <Route path="/personal-loans" component={PersonalLoans} />
       <Route path="/credit-cards" component={CreditCards} />
+      <Route path="/business-loans" component={BusinessLoans} />
       <Route component={NotFound} />
     </Switch>
   );

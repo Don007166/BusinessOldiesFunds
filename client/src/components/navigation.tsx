@@ -29,10 +29,19 @@ export default function Navigation() {
               </button>
               
               <div className="hidden lg:flex space-x-8">
-                <button onClick={() => setLocation("/")} className="relative text-blue-600 font-semibold pb-2 group">
-                  Personal
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-100 transition-transform duration-200"></div>
-                </button>
+                <div className="relative group">
+                  <button className="text-blue-600 font-semibold pb-2 group">
+                    Personal
+                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-100 transition-transform duration-200"></div>
+                  </button>
+                  <div className="absolute top-full left-0 w-48 bg-white shadow-lg rounded-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <button onClick={() => setLocation("/")} className="w-full text-left px-4 py-2 hover:bg-bof-light">Banking</button>
+                    <button onClick={() => setLocation("/home-loans")} className="w-full text-left px-4 py-2 hover:bg-bof-light">Home Loans</button>
+                    <button onClick={() => setLocation("/auto-loans")} className="w-full text-left px-4 py-2 hover:bg-bof-light">Auto Loans</button>
+                    <button onClick={() => setLocation("/personal-loans")} className="w-full text-left px-4 py-2 hover:bg-bof-light">Personal Loans</button>
+                    <button onClick={() => setLocation("/credit-cards")} className="w-full text-left px-4 py-2 hover:bg-bof-light">Credit Cards</button>
+                  </div>
+                </div>
                 <button onClick={() => setLocation("/")} className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
                   Small Business
                   <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>

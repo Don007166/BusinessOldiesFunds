@@ -9,6 +9,10 @@ import { formatCurrency } from "@/lib/utils";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import ContactModal from "@/components/contact-modal";
+import TransferMoneyModal from "@/components/transfer-money-modal";
+import PayBillsModal from "@/components/pay-bills-modal";
+import MobileDepositModal from "@/components/mobile-deposit-modal";
+import LoanApplicationModal from "@/components/loan-application-modal";
 
 interface UserAuth {
   user: any;
@@ -34,6 +38,10 @@ export default function UserDashboard() {
   const { toast } = useToast();
   const { user, isLoading: isAuthLoading, isAuthenticated } = useAuth();
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showTransferModal, setShowTransferModal] = useState(false);
+  const [showPayBillsModal, setShowPayBillsModal] = useState(false);
+  const [showMobileDepositModal, setShowMobileDepositModal] = useState(false);
+  const [showLoanApplicationModal, setShowLoanApplicationModal] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -218,8 +226,11 @@ export default function UserDashboard() {
                   <CardTitle>Quick Actions</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid md:grid-cols-4 gap-4">
-                    <Button className="p-6 h-auto bg-bof-blue hover:bg-bof-navy">
+                  <div className="grid md:grid-cols-5 gap-4">
+                    <Button 
+                      className="p-6 h-auto bg-bof-blue hover:bg-bof-navy"
+                      onClick={() => setShowTransferModal(true)}
+                    >
                       <div className="text-center">
                         <svg className="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M12 1.586l-4 4v12.828l4-4V1.586zM3.707 3.293A1 1 0 002 4v10a1 1 0 00.293.707L6 18.414V5.586L3.707 3.293zM17.707 5.293L14 1.586v12.828l2.293 2.293A1 1 0 0018 16V6a1 1 0 00-.293-.707z" clipRule="evenodd" />
@@ -227,7 +238,11 @@ export default function UserDashboard() {
                         <p className="text-sm font-medium">Transfer Money</p>
                       </div>
                     </Button>
-                    <Button variant="outline" className="p-6 h-auto border-green-500 text-green-600 hover:bg-green-50">
+                    <Button 
+                      variant="outline" 
+                      className="p-6 h-auto border-green-500 text-green-600 hover:bg-green-50"
+                      onClick={() => setShowPayBillsModal(true)}
+                    >
                       <div className="text-center">
                         <svg className="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
@@ -236,13 +251,29 @@ export default function UserDashboard() {
                         <p className="text-sm font-medium">Pay Bills</p>
                       </div>
                     </Button>
-                    <Button variant="outline" className="p-6 h-auto border-purple-500 text-purple-600 hover:bg-purple-50">
+                    <Button 
+                      variant="outline" 
+                      className="p-6 h-auto border-purple-500 text-purple-600 hover:bg-purple-50"
+                      onClick={() => setShowMobileDepositModal(true)}
+                    >
                       <div className="text-center">
                         <svg className="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
                           <path fillRule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clipRule="evenodd" />
                         </svg>
                         <p className="text-sm font-medium">Mobile Deposit</p>
+                      </div>
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="p-6 h-auto border-yellow-500 text-yellow-600 hover:bg-yellow-50"
+                      onClick={() => setShowLoanApplicationModal(true)}
+                    >
+                      <div className="text-center">
+                        <svg className="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" />
+                        </svg>
+                        <p className="text-sm font-medium">Apply for Loan</p>
                       </div>
                     </Button>
                     <Button 
@@ -274,6 +305,25 @@ export default function UserDashboard() {
       <ContactModal 
         isOpen={showContactModal} 
         onClose={() => setShowContactModal(false)} 
+      />
+      <TransferMoneyModal 
+        isOpen={showTransferModal} 
+        onClose={() => setShowTransferModal(false)}
+        accounts={dashboardData?.accounts || []}
+      />
+      <PayBillsModal 
+        isOpen={showPayBillsModal} 
+        onClose={() => setShowPayBillsModal(false)}
+        accounts={dashboardData?.accounts || []}
+      />
+      <MobileDepositModal 
+        isOpen={showMobileDepositModal} 
+        onClose={() => setShowMobileDepositModal(false)}
+        accounts={dashboardData?.accounts || []}
+      />
+      <LoanApplicationModal 
+        isOpen={showLoanApplicationModal} 
+        onClose={() => setShowLoanApplicationModal(false)}
       />
     </div>
   );
