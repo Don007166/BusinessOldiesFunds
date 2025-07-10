@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import ContactModal from "@/components/contact-modal";
 
 export default function Footer() {
@@ -30,10 +31,10 @@ export default function Footer() {
           <div>
             <h4 className="font-bold mb-4">Lending</h4>
             <ul className="space-y-2 text-sm text-blue-200">
-              <li><a href="#" className="hover:text-white transition-colors">Home Loans</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Auto Loans</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Credit Cards</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Personal Loans</a></li>
+              <li><Link href="/home-loans" className="hover:text-white transition-colors">Home Loans</Link></li>
+              <li><Link href="/auto-loans" className="hover:text-white transition-colors">Auto Loans</Link></li>
+              <li><Link href="/credit-cards" className="hover:text-white transition-colors">Credit Cards</Link></li>
+              <li><Link href="/personal-loans" className="hover:text-white transition-colors">Personal Loans</Link></li>
             </ul>
           </div>
           <div>

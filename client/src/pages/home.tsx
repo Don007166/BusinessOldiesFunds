@@ -50,7 +50,7 @@ export default function Home() {
               </svg>
               <h3 className="text-xl font-bold text-bof-navy mb-2">Auto Purchase Loans</h3>
               <p className="text-gray-600 mb-4">Competitive rates on purchase and lease buyout loans</p>
-              <button className="text-bof-blue font-semibold hover:underline">Check rates →</button>
+              <button onClick={() => window.location.href = "/auto-loans"} className="text-bof-blue font-semibold hover:underline">Check rates →</button>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md">
               <svg className="w-12 h-12 text-green-600 mb-4" fill="currentColor" viewBox="0 0 20 20">
@@ -58,7 +58,7 @@ export default function Home() {
               </svg>
               <h3 className="text-xl font-bold text-bof-navy mb-2">Auto Prequalification</h3>
               <p className="text-gray-600 mb-4">No credit score impact. For customers with a BOF login.</p>
-              <button className="text-bof-blue font-semibold hover:underline">Get prequalified →</button>
+              <button onClick={() => window.location.href = "/auto-loans"} className="text-bof-blue font-semibold hover:underline">Get prequalified →</button>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md">
               <svg className="w-12 h-12 text-purple-600 mb-4" fill="currentColor" viewBox="0 0 20 20">
@@ -66,7 +66,7 @@ export default function Home() {
               </svg>
               <h3 className="text-xl font-bold text-bof-navy mb-2">Auto Refinance</h3>
               <p className="text-gray-600 mb-4">Refinance and you could get a lower rate</p>
-              <button className="text-bof-blue font-semibold hover:underline">Learn more →</button>
+              <button onClick={() => window.location.href = "/auto-loans"} className="text-bof-blue font-semibold hover:underline">Learn more →</button>
             </div>
           </div>
         </div>

@@ -13,6 +13,10 @@ import ManageAccounts from "@/pages/manage-accounts";
 import CardServices from "@/pages/card-services";
 import UserDashboard from "@/pages/user-dashboard";
 import TransactionHistory from "@/pages/transaction-history";
+import HomeLoans from "@/pages/home-loans";
+import AutoLoans from "@/pages/auto-loans";
+import PersonalLoans from "@/pages/personal-loans";
+import CreditCards from "@/pages/credit-cards";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -30,6 +34,10 @@ function Router() {
       <Route path="/admin/customer/:userId/cards" component={CardServices} />
       <Route path="/dashboard" component={UserDashboard} />
       <Route path="/transactions" component={TransactionHistory} />
+      <Route path="/home-loans" component={HomeLoans} />
+      <Route path="/auto-loans" component={AutoLoans} />
+      <Route path="/personal-loans" component={PersonalLoans} />
+      <Route path="/credit-cards" component={CreditCards} />
       <Route component={NotFound} />
     </Switch>
   );
